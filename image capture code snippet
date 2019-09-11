@@ -1,3 +1,5 @@
 <input type="file" accept="image/*" capture>
 <input type="file" accept="image/*" capture="user">
 <input type="file" accept="image/*" capture="environment">
+
+https://developers.google.com/web/fundamentals/media/capturing-images/
