@@ -6,6 +6,8 @@ from models.user import User
 import config
 import os
 
+
+#Adding comment for test
 web_dir = os.path.join(os.path.dirname(
     os.path.abspath(__file__)), 'web_app')
 
