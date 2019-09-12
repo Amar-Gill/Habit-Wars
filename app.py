@@ -6,8 +6,10 @@ from models.user import User
 import config
 import os
 
-
 #Adding comment for test
+#this is amars comment
+#another comment is here
+#more comments
 
 test_variable = True
 
