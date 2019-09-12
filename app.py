@@ -8,7 +8,8 @@ import os
 
 
 #Adding comment for test
-
+#this is amars comment
+#another comment is here
 test_variable = True
 
 web_dir = os.path.join(os.path.dirname(
