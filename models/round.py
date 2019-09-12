@@ -1,4 +1,4 @@
-from models.base_model import BaseModel, IntArrayField
+from models.base_model import BaseModel
 from playhouse.postgres_ext import ArrayField
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, login_manager, current_user

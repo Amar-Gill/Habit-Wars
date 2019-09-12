@@ -11,3 +11,4 @@ class Game(BaseModel):
     player_2 = pw.ForeignKeyField(User, backref='games', null=False)
     player_1_score = pw.IntegerField(default=0, null=False)
     player_2_score = pw.IntegerField(default=0, null=False)
+    accepted = pw.BooleanField(default=False)
