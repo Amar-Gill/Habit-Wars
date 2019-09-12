@@ -8,6 +8,9 @@ import os
 
 
 #Adding comment for test
+
+test_variable = True
+
 web_dir = os.path.join(os.path.dirname(
     os.path.abspath(__file__)), 'web_app')
 
