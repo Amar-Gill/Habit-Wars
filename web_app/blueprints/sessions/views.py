@@ -5,6 +5,7 @@ import peewee as pw
 from config import Config
 
 
+# debug= true
 sessions_blueprint = Blueprint('sessions',
                             __name__,
                             template_folder='templates')
