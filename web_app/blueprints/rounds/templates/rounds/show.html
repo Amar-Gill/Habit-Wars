@@ -1,1 +1,74 @@
-<h1> manz got {{num_dice}} dice to roll!</h1>
+{% extends '_layout.html' %}
+
+{% block content %}
+    <h3> You got {{num_dice}} dice to roll for this week!</h3>
+
+    <div class="container">
+        <div class="row">
+            {% for num in num_dice %}
+            <div class="col dice-box">SHOW DICE HERE</div>
+            {% endfor %}
+        </div>
+        <div class="row stat-row">
+            <div class="col-8">ATTACK</div>
+            <div class="col-4">
+                <select>
+                    <option selected disabled>Apply Bonus</option>
+                    <option>dice roll 1</option>
+                    <option>dice roll 2</option>
+                    <option>dice roll 3</option>
+                </select>
+            </div>
+        </div>
+        <div class="row stat-row">
+            <div class="col-8">HITPOINTS</div>
+            <div class="col-4">
+                <select>
+                    <option selected disabled>Apply Bonus</option>
+                    <option>dice roll 1</option>
+                    <option>dice roll 2</option>
+                    <option>dice roll 3</option>
+                </select>
+            </div>
+        </div>
+        <div class="row stat-row">
+            <div class="col-8">LUCK</div>
+            <div class="col-4">
+                <select>
+                    <option selected disabled>Apply Bonus</option>
+                    <option>dice roll 1</option>
+                    <option>dice roll 2</option>
+                    <option>dice roll 3</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <button class="btn btn-primary text-light">
+                    SUBMIT STAT BOOSTERS
+
+                </button>
+            </div>
+            <div class="col">
+                <button class="btn btn-danger text-light">
+                    ROLL INITIATIVE AND BATTLE
+
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .dice-box{
+            height: 20vh;
+            background-color: aquamarine;
+            margin: 8px;
+        }
+        .stat-row {
+            background-color: palevioletred;
+            margin-top: 4px;
+            margin-bottom: 4px;
+        }
+    </style>
+
+{% endblock %}

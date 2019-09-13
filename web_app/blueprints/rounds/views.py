@@ -19,7 +19,7 @@ def show():
     # hardcode game_id for now
     game_id = 1
 
-    num_dice = 0
+    num_dice = []
 
     #get round id
     round_id = 1 #hardcode for dev purposes
@@ -46,6 +46,10 @@ def show():
         #compare length of list to frequency number
         if len(approved_logs) >= habit.frequency:
             #append to dice list
-            num_dice += 1
+            num_dice += [1]
 
     return render_template('rounds/show.html', num_dice=num_dice)
+
+@rounds_blueprint.route('/roll')
+def roll_dice():
+    pass
