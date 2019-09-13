@@ -13,5 +13,5 @@ class LogHabit(BaseModel):
     sender = pw.ForeignKeyField(User, backref='log_habits', null=False)
     receiver = pw.ForeignKeyField(User, backref='log_habits', null=False)
     approved = pw.BooleanField(default=False)
-    image_path = pw.CharField()
+    image_path = pw.CharField(default='')
     game_round = pw.ForeignKeyField(Round, backref='log_habits', null=False)

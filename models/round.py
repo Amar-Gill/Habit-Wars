@@ -12,8 +12,8 @@ class Round(BaseModel):
     game = pw.ForeignKeyField(Game, backref='rounds', null=False)
     player_1_rolls = ArrayField(pw.IntegerField, null=True)
     player_2_rolls = ArrayField(pw.IntegerField, null=True)
-    player_1_initiative = pw.IntegerField(null=False)
-    player_2_inititative = pw.IntegerField(null=False)
+    player_1_initiative = pw.IntegerField(null=True)
+    player_2_inititative = pw.IntegerField(null=True)
     player_1_stats = ArrayField(pw.IntegerField, default=[10,150,5]) #make array
     player_2_stats = ArrayField(pw.IntegerField, default=[10,150,5]) #make array
     player_1_dmg_array = ArrayField(pw.IntegerField, default=[]) #make array
