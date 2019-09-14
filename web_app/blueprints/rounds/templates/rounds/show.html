@@ -16,8 +16,13 @@
         </div>
     </div>
     <div class="row">
-        {% for dice in dice_array %}
+        {% for i in range(0, num_dice) %}
         <div class="col dice-box">
+            {% if roll_array[i] != 0 %}
+                <button type='submit' class='dice-btn' disabled>
+                    {{roll_array[i]}}
+                </button>
+            {% else %}
             <form action={{ url_for('rounds.roll_dice', game_id = game_id, player=player_variable)}} method="POST">
                 <input value = '' type='hidden' name='roll_value'>
                 <input value = '' type='hidden' name='roll_index'>
@@ -26,6 +31,7 @@
                     ROLL DICE
                 </button>
             </form>
+            {% endif %}
         </div>
         {% endfor %}
     </div>

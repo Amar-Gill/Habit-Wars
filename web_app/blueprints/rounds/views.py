@@ -26,20 +26,24 @@ def show():
 
     #empty array for number of dice
     dice_array = []
+    num_dice = 0
 
-    #get round id
+    #get round id and round instance
     round_id = 1 #hardcode for dev purposes
+    round = Round.get_by_id(round_id)
 
     #get current player id - hardcoded for now
     current_player = User.get_by_id(1)
 
-    #determine if current_user is p1 or p2
+    #determine if current_user is p1 or p2 and get roll array
     game_player_1_id = game.player_1_id
     # if current_user.id == game_player_1_id:
     if current_player.id == game_player_1_id:
         player_variable = 1
+        roll_array = round.player_1_rolls
     else:
         player_variable = 2
+        roll_array = round.player_2_rolls
 
 
     #querydb get habits with user_id==current user AND game_id==game_id
@@ -50,7 +54,6 @@ def show():
     #for each habit, query log_habits table and get number of rows for that habit for current_round that r approved
     #compare to frequency number of the habit
     for habit in current_user_habit_array:
-        print('littt')
 
         #query loghabit table for rows belonging to habit/user which are approved
         # approved_logs = LogHabit.select().where((LogHabit.sender==current_user.id) & (LogHabit.habit_id == habit.id) & (LogHabit.approved==True) & (LogHabit.game_round_id == round_id))
@@ -61,8 +64,9 @@ def show():
         if len(approved_logs) >= habit.frequency:
             #append to dice list
             dice_array += [1]
+            num_dice += 1
 
-    return render_template('rounds/show.html', dice_array=dice_array, player_variable=player_variable, game_id=game_id)
+    return render_template('rounds/show.html', num_dice=num_dice, dice_array=dice_array, player_variable=player_variable, game_id=game_id, roll_array=roll_array)
 
 @rounds_blueprint.route('/game=<game_id>/player=<player>/roll', methods=['POST'])
 def roll_dice(game_id, player):
@@ -79,4 +83,4 @@ def roll_dice(game_id, player):
         round.player_2_rolls[roll_index] = roll_value
         round.save()
 
-    return 'LEEROY FUCKIN JENKINZ'
+    return redirect('round/game=1/show')
