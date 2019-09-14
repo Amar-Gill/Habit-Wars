@@ -5,21 +5,27 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            Round: 1
+            Round: 1 <br>
+            You are player # {{player_variable}}
         </div>
         <div class="col">
             Week Ending: DATE
         </div>
         <div class="col">
-            Dice: {{num_dice}}
+            Dice: {{dice_array}}
         </div>
     </div>
     <div class="row">
-        {% for num in num_dice %}
+        {% for dice in dice_array %}
         <div class="col dice-box">
-            <button class='dice-btn'>
-                ROLL Dice
-            </button>
+            <form action={{ url_for('rounds.roll_dice', game_id = game_id, player=player_variable)}} method="POST">
+                <input value = '' type='hidden' name='roll_value'>
+                <input value = '' type='hidden' name='roll_index'>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <button type='submit' class='dice-btn'>
+                    ROLL DICE
+                </button>
+            </form>
         </div>
         {% endfor %}
     </div>
@@ -102,7 +108,7 @@
 </div>
 
 <script>
-    let diceStatus = [...{{num_dice}}]
+    let diceStatus = [...{{ dice_array }}]
 
     let dice = {
         sides: 6,
@@ -115,18 +121,55 @@
     let diceButtons = document.getElementsByClassName('dice-btn')
 
     for (let i = 0, l = diceButtons.length; i < l; i++) {
+        //apply class name to dice-btn forms
         console.log(diceButtons[i])
+        diceButtons[i].parentElement.classList.add(`dice-form-${i}`)
+
+        //add event listeners
         diceButtons[i].addEventListener('click', (e) => {
-            console.log(dice.roll())
-            diceStatus[i] = 0
-            e.target.disabled = true
-        } )
+            e.preventDefault()
+            const submitForm = document.querySelector(`.dice-form-${i}`)
+            const rollValue = dice.roll()
+            
+            //get children of form
+            const formChildren = submitForm.children
+
+            //update roll_value and roll_index form fields
+            formChildren[0].value = rollValue
+            formChildren[1].value = i
+            
+            submitForm.submit()
+
+
+
+            //send roll_value to server to save in db via ajax
+            //ice boxed for now
+            // $.ajax({
+            //     type: 'POST',
+            //     url: "http://127.0.0.1:5000/round/roll",
+            //     data: JSON.stringify({
+            //         "roll_value": rollValue,
+            //         "roll_index": i
+            //     }),
+            //     error: (e) => {
+            //         console.log(e)
+            //     },
+            //     dataType: "json",
+            //     contentType: "application/json"
+            // })
+            //     .then((data) => {
+            //         diceStatus[i] = 0
+            //         e.target.disabled = true
+            //         e.target.innerHTML = rollValue
+            //         console.log(data)
+            //     })
+        })
     }
 
     document.addEventListener('change', () => {
         break
     })
- 
+
 </script>
 
 <style>
