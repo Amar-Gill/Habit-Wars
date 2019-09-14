@@ -1,74 +1,158 @@
 {% extends '_layout.html' %}
 
 {% block content %}
-    <h3> You got {{num_dice}} dice to roll for this week!</h3>
 
-    <div class="container">
-        <div class="row">
-            {% for num in num_dice %}
-            <div class="col dice-box">SHOW DICE HERE</div>
-            {% endfor %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            Round: 1
         </div>
-        <div class="row stat-row">
-            <div class="col-8">ATTACK</div>
-            <div class="col-4">
-                <select>
-                    <option selected disabled>Apply Bonus</option>
-                    <option>dice roll 1</option>
-                    <option>dice roll 2</option>
-                    <option>dice roll 3</option>
-                </select>
-            </div>
+        <div class="col">
+            Week Ending: DATE
         </div>
-        <div class="row stat-row">
-            <div class="col-8">HITPOINTS</div>
-            <div class="col-4">
-                <select>
-                    <option selected disabled>Apply Bonus</option>
-                    <option>dice roll 1</option>
-                    <option>dice roll 2</option>
-                    <option>dice roll 3</option>
-                </select>
-            </div>
+        <div class="col">
+            Dice: {{num_dice}}
         </div>
-        <div class="row stat-row">
-            <div class="col-8">LUCK</div>
-            <div class="col-4">
-                <select>
-                    <option selected disabled>Apply Bonus</option>
-                    <option>dice roll 1</option>
-                    <option>dice roll 2</option>
-                    <option>dice roll 3</option>
-                </select>
-            </div>
+    </div>
+    <div class="row">
+        {% for num in num_dice %}
+        <div class="col dice-box">
+            <button class='dice-btn'>
+                ROLL Dice
+            </button>
         </div>
-        <div class="row">
-            <div class="col">
-                <button class="btn btn-primary text-light">
-                    SUBMIT STAT BOOSTERS
+        {% endfor %}
+    </div>
+    <div class="row stat-row">
+        <div class="col-7">ATTACK</div>
+        <div class="col-5">
+            <form action="#">
+                <div class="form-group">
+                    <select class='form-control'>
+                        <option selected disabled>Apply Bonus</option>
+                        <option>dice roll 1</option>
+                        <option>dice roll 2</option>
+                        <option>dice roll 3</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row stat-row">
+        <div class="col-7">HITPOINTS</div>
+        <div class="col-5">
+            <form action="#">
+                <div class="form-group">
+                    <select class='form-control'>
+                        <option selected disabled>Apply Bonus</option>
+                        <option>dice roll 1</option>
+                        <option>dice roll 2</option>
+                        <option>dice roll 3</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row stat-row">
+        <div class="col-7">LUCK</div>
+        <div class="col-5">
+            <form action="#">
+                <div class="form-group">
+                    <select class='form-control'>
+                        <option selected disabled>Apply Bonus</option>
+                        <option>dice roll 1</option>
+                        <option>dice roll 2</option>
+                        <option>dice roll 3</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <form>
+                <div class="form-group">
+                    <button class="btn btn-primary text-light game-btn">
+                        SUBMIT STAT BONUSES
+                    </button>
 
-                </button>
-            </div>
-            <div class="col">
-                <button class="btn btn-danger text-light">
-                    ROLL INITIATIVE AND BATTLE
+                </div>
+            </form>
+        </div>
+        <div class="col">
+            <form>
+                <div class="form-group">
+                    <button class="btn btn-danger text-light game-btn">
+                        ROLL INITIATIVE AND BATTLE
 
-                </button>
+                    </button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="battle-box">
+                SHOW BATTLE HERE
+
             </div>
         </div>
     </div>
+</div>
 
-    <style>
-        .dice-box{
-            height: 20vh;
-            background-color: aquamarine;
-            margin: 8px;
+<script>
+    let diceStatus = [...{{num_dice}}]
+
+    let dice = {
+        sides: 6,
+        roll: function () {
+            let randomNumber = Math.floor(Math.random() * this.sides) + 1;
+            return randomNumber;
         }
-        .stat-row {
-            background-color: palevioletred;
-            margin-top: 4px;
-            margin-bottom: 4px;
-        }
-    </style>
+    }
+
+    let diceButtons = document.getElementsByClassName('dice-btn')
+
+    for (let i = 0, l = diceButtons.length; i < l; i++) {
+        console.log(diceButtons[i])
+        diceButtons[i].addEventListener('click', (e) => {
+            console.log(dice.roll())
+            diceStatus[i] = 0
+            e.target.disabled = true
+        } )
+    }
+
+    document.addEventListener('change', () => {
+        break
+    })
+ 
+</script>
+
+<style>
+    .dice-box {
+        height: 20vh;
+        background-color: aquamarine;
+        margin: 8px;
+    }
+
+    .stat-row {
+        background-color: palevioletred;
+        margin-top: 4px;
+        margin-bottom: 4px;
+        height: 6vh;
+    }
+
+    .game-btn {
+        width: 40vw;
+        height: 12vh;
+        white-space: normal;
+    }
+
+    .battle-box {
+        height: 100%;
+        background-color: pink;
+    }
+</style>
 
 {% endblock %}
