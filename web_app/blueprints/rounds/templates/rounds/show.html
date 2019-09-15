@@ -43,7 +43,7 @@
                     <select id='attack-select' class='form-control'>
                         <option value=0 selected>Apply Bonus</option>
                         {% for i in range(0,num_dice) %}
-                        <option class='roll-option' value={{roll_array[i]}} id='attack-select-{{i}}'>{{roll_array[i]}}
+                        <option class='roll-option-{{i}}' value={{roll_array[i]}} id='attack-select-{{i}}'>{{roll_array[i]}}
                         </option>
                         {% endfor %}
                     </select>
@@ -59,7 +59,7 @@
                     <select id='hitpoints-select' class='form-control'>
                         <option value=0 selected>Apply Bonus</option>
                         {% for i in range(0,num_dice) %}
-                        <option class='roll-option' value={{roll_array[i]}} id='hitpoints-select-{{i}}'>{{roll_array[i]}}
+                        <option class='roll-option-{{i}}' value={{roll_array[i]}} id='hitpoints-select-{{i}}'>{{roll_array[i]}}
                         </option>
                         {% endfor %}
                     </select>
@@ -75,7 +75,7 @@
                     <select id='luck-select' class='form-control'>
                         <option value=0 selected>Apply Bonus</option>
                         {% for i in range(0,num_dice) %}
-                        <option class='roll-option' value={{roll_array[i]}} id='luck-select-{{i}}'>{{roll_array[i]}}
+                        <option class='roll-option-{{i}}' value={{roll_array[i]}} id='luck-select-{{i}}'>{{roll_array[i]}}
                         </option>
                         {% endfor %}
                     </select>
@@ -126,14 +126,15 @@
         // enable all options
         $selects.find('option').prop('disabled', false);
 
-        // loop over each select, use its value to 
+        // loop over each select, use its class name to 
         // disable the options in the other selects
         $selects.each(function () {
+            let selectIndex = this.options['selectedIndex']
+            let rollIndex = selectIndex - 1
             $selects.not(this)
-                .find('.roll-option[value="' + this.value + '"]')
+                .find(`.roll-option-${rollIndex}`)
                 .prop('disabled', true);
         });
-
     });
 
 
