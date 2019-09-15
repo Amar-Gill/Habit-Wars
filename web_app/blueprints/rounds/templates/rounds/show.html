@@ -19,14 +19,14 @@
         {% for i in range(0, num_dice) %}
         <div class="col dice-box">
             {% if roll_array[i] != 0 %}
-                <button type='submit' class='dice-btn' disabled>
-                    {{roll_array[i]}}
-                </button>
+            <button type='submit' class='dice-btn' disabled>
+                {{roll_array[i]}}
+            </button>
             {% else %}
             <form action={{ url_for('rounds.roll_dice', game_id = game_id, player=player_variable)}} method="POST">
-                <input value = '' type='hidden' name='roll_value'>
-                <input value = '' type='hidden' name='roll_index'>
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <input value='' type='hidden' name='roll_value'>
+                <input value='' type='hidden' name='roll_index'>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                 <button type='submit' class='dice-btn'>
                     ROLL DICE
                 </button>
@@ -38,13 +38,14 @@
     <div class="row stat-row">
         <div class="col-7">ATTACK</div>
         <div class="col-5">
-            <form action="#">
+            <form id='attack-form' action="#">
                 <div class="form-group">
-                    <select class='form-control'>
-                        <option selected disabled>Apply Bonus</option>
-                        <option>dice roll 1</option>
-                        <option>dice roll 2</option>
-                        <option>dice roll 3</option>
+                    <select id='attack-select' class='form-control'>
+                        <option value=0 selected>Apply Bonus</option>
+                        {% for i in range(0,num_dice) %}
+                        <option class='roll-option' value={{roll_array[i]}} id='attack-select-{{i}}'>{{roll_array[i]}}
+                        </option>
+                        {% endfor %}
                     </select>
                 </div>
             </form>
@@ -53,13 +54,14 @@
     <div class="row stat-row">
         <div class="col-7">HITPOINTS</div>
         <div class="col-5">
-            <form action="#">
+            <form id='hitpoints-form' action="#">
                 <div class="form-group">
-                    <select class='form-control'>
-                        <option selected disabled>Apply Bonus</option>
-                        <option>dice roll 1</option>
-                        <option>dice roll 2</option>
-                        <option>dice roll 3</option>
+                    <select id='hitpoints-select' class='form-control'>
+                        <option value=0 selected>Apply Bonus</option>
+                        {% for i in range(0,num_dice) %}
+                        <option class='roll-option' value={{roll_array[i]}} id='hitpoints-select-{{i}}'>{{roll_array[i]}}
+                        </option>
+                        {% endfor %}
                     </select>
                 </div>
             </form>
@@ -68,13 +70,14 @@
     <div class="row stat-row">
         <div class="col-7">LUCK</div>
         <div class="col-5">
-            <form action="#">
+            <form id='luck-form' action="#">
                 <div class="form-group">
-                    <select class='form-control'>
-                        <option selected disabled>Apply Bonus</option>
-                        <option>dice roll 1</option>
-                        <option>dice roll 2</option>
-                        <option>dice roll 3</option>
+                    <select id='luck-select' class='form-control'>
+                        <option value=0 selected>Apply Bonus</option>
+                        {% for i in range(0,num_dice) %}
+                        <option class='roll-option' value={{roll_array[i]}} id='luck-select-{{i}}'>{{roll_array[i]}}
+                        </option>
+                        {% endfor %}
                     </select>
                 </div>
             </form>
@@ -114,7 +117,25 @@
 </div>
 
 <script>
-    let diceStatus = [...{{ dice_array }}]
+    const diceStatus = [...{{ dice_array }}]
+
+    let $selects = $('select');
+
+    $selects.on('change', function () {
+
+        // enable all options
+        $selects.find('option').prop('disabled', false);
+
+        // loop over each select, use its value to 
+        // disable the options in the other selects
+        $selects.each(function () {
+            $selects.not(this)
+                .find('.roll-option[value="' + this.value + '"]')
+                .prop('disabled', true);
+        });
+
+    });
+
 
     let dice = {
         sides: 6,
@@ -128,7 +149,6 @@
 
     for (let i = 0, l = diceButtons.length; i < l; i++) {
         //apply class name to dice-btn forms
-        console.log(diceButtons[i])
         diceButtons[i].parentElement.classList.add(`dice-form-${i}`)
 
         //add event listeners
@@ -136,17 +156,15 @@
             e.preventDefault()
             const submitForm = document.querySelector(`.dice-form-${i}`)
             const rollValue = dice.roll()
-            
+
             //get children of form
             const formChildren = submitForm.children
 
             //update roll_value and roll_index form fields
             formChildren[0].value = rollValue
             formChildren[1].value = i
-            
+
             submitForm.submit()
-
-
 
             //send roll_value to server to save in db via ajax
             //ice boxed for now
@@ -172,10 +190,6 @@
         })
     }
 
-    document.addEventListener('change', () => {
-        break
-    })
-
 </script>
 
 <style>
@@ -193,7 +207,7 @@
     }
 
     .game-btn {
-        width: 40vw;
+        width: 90%;
         height: 12vh;
         white-space: normal;
     }
