@@ -11,8 +11,9 @@ from config import Config
 
 
 rounds_blueprint = Blueprint('rounds',
-                            __name__,
-                            template_folder='templates')
+                             __name__,
+                             template_folder='templates')
+
 
 @rounds_blueprint.route('/game=1/show')
 # def show(game_id):
@@ -21,52 +22,57 @@ def show():
     # hardcode game_id for now
     game_id = 1
 
-    #get game model object
+    # get game model object
     game = Game.get_by_id(game_id)
 
-    #empty array for number of dice
+    # empty array for number of dice
     dice_array = []
     num_dice = 0
 
-    #get round id and round instance
-    round_id = 1 #hardcode for dev purposes
+    # get round id and round instance
+    round_id = 1  # hardcode for dev purposes
     round = Round.get_by_id(round_id)
 
-    #get current player id - hardcoded for now
+    # get current player id - hardcoded for now
     current_player = User.get_by_id(1)
 
-    #determine if current_user is p1 or p2 and get roll array
+    # determine if current_user is p1 or p2 and get roll array
     game_player_1_id = game.player_1_id
     # if current_user.id == game_player_1_id:
     if current_player.id == game_player_1_id:
         player_variable = 1
         roll_array = round.player_1_rolls
+        player_stats = round.player_1_stats
+        player_initiative = round.player_1_initiative
     else:
         player_variable = 2
         roll_array = round.player_2_rolls
+        player_stats = round.player_2_stats
+        player_initiative = round.player_2_initiative
 
-
-    #querydb get habits with user_id==current user AND game_id==game_id
+    # querydb get habits with user_id==current user AND game_id==game_id
     # current_user_habit_array = Habit.select().where((Habit.user_id == current_user.id) & (Habit.game_id == game_id))
-    current_user_habit_array = Habit.select().where((Habit.user_id == current_player.id) & (Habit.game_id == game_id))
+    current_user_habit_array = Habit.select().where(
+        (Habit.user_id == current_player.id) & (Habit.game_id == game_id))
 
-
-    #for each habit, query log_habits table and get number of rows for that habit for current_round that r approved
-    #compare to frequency number of the habit
+    # for each habit, query log_habits table and get number of rows for that habit for current_round that r approved
+    # compare to frequency number of the habit
     for habit in current_user_habit_array:
 
-        #query loghabit table for rows belonging to habit/user which are approved
+        # query loghabit table for rows belonging to habit/user which are approved
         # approved_logs = LogHabit.select().where((LogHabit.sender==current_user.id) & (LogHabit.habit_id == habit.id) & (LogHabit.approved==True) & (LogHabit.game_round_id == round_id))
-        approved_logs = LogHabit.select().where((LogHabit.sender==current_player.id) & (LogHabit.habit_id == habit.id) & (LogHabit.approved==True) & (LogHabit.game_round_id == round_id))
+        approved_logs = LogHabit.select().where((LogHabit.sender == current_player.id) & (
+            LogHabit.habit_id == habit.id) & (LogHabit.approved == True) & (LogHabit.game_round_id == round_id))
 
-        #get length of list
-        #compare length of list to frequency number
+        # get length of list
+        # compare length of list to frequency number
         if len(approved_logs) >= habit.frequency:
-            #append to dice list
+            # append to dice list
             dice_array += [1]
             num_dice += 1
 
-    return render_template('rounds/show.html', num_dice=num_dice, dice_array=dice_array, player_variable=player_variable, game_id=game_id, roll_array=roll_array)
+    return render_template('rounds/show.html', num_dice=num_dice, dice_array=dice_array, player_variable=player_variable, game_id=game_id, roll_array=roll_array, player_stats=player_stats, player_initiative=player_initiative)
+
 
 @rounds_blueprint.route('/game=<game_id>/player=<player>/roll', methods=['POST'])
 def roll_dice(game_id, player):
@@ -81,6 +87,33 @@ def roll_dice(game_id, player):
         round.save()
     else:
         round.player_2_rolls[roll_index] = roll_value
+        round.save()
+
+    return redirect('round/game=1/show')
+
+
+@rounds_blueprint.route('/game=<game_id>/player=<player>/submit_stats', methods=['POST'])
+def submit_stats(game_id, player):
+
+    # get round instance - do we need game_id????
+    round = Round.get_by_id(1)
+
+    stats_array = [
+        int(request.form.get('attack-input')),
+        int(request.form.get('hitpoints-input')),
+        int(request.form.get('luck-input'))
+    ]
+    print(type(stats_array))
+    print(type(stats_array[0]))
+    print(stats_array)
+
+    if player == '1':
+        round.player_1_stats = stats_array
+        round.player_1_initiative = -1
+        round.save()
+    else:
+        round.player_2_stats = stats_array
+        round.player_2_initiative = -1
         round.save()
 
     return redirect('round/game=1/show')

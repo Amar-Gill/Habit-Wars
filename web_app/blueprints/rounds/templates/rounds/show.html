@@ -37,14 +37,15 @@
     </div>
     <div class="row stat-row">
         <div class="col-4">ATTACK</div>
-        <div class="col-3" id='attack-stat'>10</div>
+        <div class="col-3" id='attack-stat'>{{player_stats[0]}}</div>
         <div class="col-5">
             <form id='attack-form' action="#">
                 <div class="form-group">
                     <select id='attack-select' class='form-control'>
                         <option value=0 selected>Apply Bonus</option>
                         {% for i in range(0,num_dice) %}
-                        <option class='roll-option-{{i}}' value={{roll_array[i]}} id='attack-select-{{i}}'>{{roll_array[i]}}
+                        <option class='roll-option-{{i}}' value={{roll_array[i]}} id='attack-select-{{i}}'>
+                            {{roll_array[i]}}
                         </option>
                         {% endfor %}
                     </select>
@@ -54,14 +55,15 @@
     </div>
     <div class="row stat-row">
         <div class="col-4">HITPOINTS</div>
-        <div class="col-3" id='hitpoints-stat'>150</div>
+        <div class="col-3" id='hitpoints-stat'>{{player_stats[1]}}</div>
         <div class="col-5">
             <form id='hitpoints-form' action="#">
                 <div class="form-group">
                     <select id='hitpoints-select' class='form-control'>
                         <option value=0 selected>Apply Bonus</option>
                         {% for i in range(0,num_dice) %}
-                        <option class='roll-option-{{i}}' value={{roll_array[i]}} id='hitpoints-select-{{i}}'>{{roll_array[i]}}
+                        <option class='roll-option-{{i}}' value={{roll_array[i]}} id='hitpoints-select-{{i}}'>
+                            {{roll_array[i]}}
                         </option>
                         {% endfor %}
                     </select>
@@ -71,14 +73,15 @@
     </div>
     <div class="row stat-row">
         <div class="col-4">LUCK</div>
-        <div class="col-3" id='luck-stat'>5</div>
+        <div class="col-3" id='luck-stat'>{{player_stats[2]}}</div>
         <div class="col-5">
             <form id='luck-form' action="#">
                 <div class="form-group">
                     <select id='luck-select' class='form-control'>
                         <option value=0 selected>Apply Bonus</option>
                         {% for i in range(0,num_dice) %}
-                        <option class='roll-option-{{i}}' value={{roll_array[i]}} id='luck-select-{{i}}'>{{roll_array[i]}}
+                        <option class='roll-option-{{i}}' value={{roll_array[i]}} id='luck-select-{{i}}'>
+                            {{roll_array[i]}}
                         </option>
                         {% endfor %}
                     </select>
@@ -88,9 +91,14 @@
     </div>
     <div class="row">
         <div class="col">
-            <form>
+            <form id='submit-stats-form'
+                action={{ url_for('rounds.submit_stats', game_id = game_id, player=player_variable)}} method="POST">
                 <div class="form-group">
-                    <button class="btn btn-primary text-light game-btn">
+                    <input type='hidden' id='attack-input' name='attack-input'>
+                    <input type='hidden' id='hitpoints-input' name='hitpoints-input'>
+                    <input type='hidden' id='luck-input' name='luck-input'>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                    <button id='submit-stats-btn' class="btn btn-primary text-light game-btn">
                         SUBMIT STAT BONUSES
                     </button>
 
@@ -102,7 +110,6 @@
                 <div class="form-group">
                     <button class="btn btn-danger text-light game-btn">
                         ROLL INITIATIVE AND BATTLE
-
                     </button>
 
                 </div>
@@ -122,6 +129,16 @@
 <script>
     const diceStatus = [...{{ dice_array }}]
 
+    const initiative = {{ player_initiative }}
+
+    //disable select buttons if stat boosters submitted
+    //and if player_x_initiative == 'pending roll'
+    if (initiative) {
+        $('select').prop('disabled', true)
+        $('#submit-stats-btn').prop('disabled', true)
+    }
+
+    //disabling options for other select menus if option is selected in any select menu
     let $selects = $('select');
 
     $selects.on('change', function () {
@@ -143,20 +160,35 @@
     //updating stats when booster selected
     $('#attack-select').on('change', (e) => {
         const multiplier = e.target.value
-        $("#attack-stat").html(10 + 10*multiplier) //can enter base stat from db if desired
+        $("#attack-stat").html({{ player_stats[0]}} + 10 * multiplier) //can enter base stat from db if desired
     })
 
     $('#hitpoints-select').on('change', (e) => {
         const multiplier = e.target.value
-        $("#hitpoints-stat").html(150 + 10*multiplier) //can enter base stat from db if desired
+        $("#hitpoints-stat").html({{ player_stats[1]}} + 10 * multiplier) //can enter base stat from db if desired
     })
 
     $('#luck-select').on('change', (e) => {
         const multiplier = e.target.value
-        $("#luck-stat").html(10 + 5*multiplier) //can enter base stat from db if desired
+        $("#luck-stat").html({{ player_stats[2]}} + 5 * multiplier) //can enter base stat from db if desired
     })
 
+    //sending stat boosters to server
+    //maybe update initiative to 0? or 'pending'? for use with conditional rendering of elements
+    $("#submit-stats-btn").on('click', (e) => {
+        e.preventDefault()
+        const statsArray = [
+            parseInt($("#attack-stat").html()),
+            parseInt($("#hitpoints-stat").html()),
+            parseInt($("#luck-stat").html())
+        ]
+        $("#attack-input").val(statsArray[0])
+        $("#hitpoints-input").val(statsArray[1])
+        $("#luck-input").val(statsArray[2])
+        $("#submit-stats-form").submit()
+    })
 
+    //dice parameters
     let dice = {
         sides: 6,
         roll: function () {
