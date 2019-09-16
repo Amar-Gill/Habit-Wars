@@ -36,7 +36,8 @@
         {% endfor %}
     </div>
     <div class="row stat-row">
-        <div class="col-7">ATTACK</div>
+        <div class="col-4">ATTACK</div>
+        <div class="col-3" id='attack-stat'>10</div>
         <div class="col-5">
             <form id='attack-form' action="#">
                 <div class="form-group">
@@ -52,7 +53,8 @@
         </div>
     </div>
     <div class="row stat-row">
-        <div class="col-7">HITPOINTS</div>
+        <div class="col-4">HITPOINTS</div>
+        <div class="col-3" id='hitpoints-stat'>150</div>
         <div class="col-5">
             <form id='hitpoints-form' action="#">
                 <div class="form-group">
@@ -68,7 +70,8 @@
         </div>
     </div>
     <div class="row stat-row">
-        <div class="col-7">LUCK</div>
+        <div class="col-4">LUCK</div>
+        <div class="col-3" id='luck-stat'>5</div>
         <div class="col-5">
             <form id='luck-form' action="#">
                 <div class="form-group">
@@ -136,6 +139,22 @@
                 .prop('disabled', true);
         });
     });
+
+    //updating stats when booster selected
+    $('#attack-select').on('change', (e) => {
+        const multiplier = e.target.value
+        $("#attack-stat").html(10 + 10*multiplier) //can enter base stat from db if desired
+    })
+
+    $('#hitpoints-select').on('change', (e) => {
+        const multiplier = e.target.value
+        $("#hitpoints-stat").html(150 + 10*multiplier) //can enter base stat from db if desired
+    })
+
+    $('#luck-select').on('change', (e) => {
+        const multiplier = e.target.value
+        $("#luck-stat").html(10 + 5*multiplier) //can enter base stat from db if desired
+    })
 
 
     let dice = {
