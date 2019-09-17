@@ -53,6 +53,8 @@ def show():
         player_initiative = round.player_2_initiative
         opponent_initiative = round.player_1_initiative
 
+    round_result = round.result
+
     # querydb get habits with user_id==current user AND game_id==game_id
     # current_user_habit_array = Habit.select().where((Habit.user_id == current_user.id) & (Habit.game_id == game_id))
     current_user_habit_array = Habit.select().where(
@@ -74,7 +76,7 @@ def show():
             dice_array += [1]
             num_dice += 1
 
-    return render_template('rounds/show.html', num_dice=num_dice, dice_array=dice_array, player_variable=player_variable, game_id=game_id, roll_array=roll_array, player_stats=player_stats, player_initiative=player_initiative, opponent_initiative=opponent_initiative)
+    return render_template('rounds/show.html', num_dice=num_dice, dice_array=dice_array, player_variable=player_variable, game_id=game_id, roll_array=roll_array, player_stats=player_stats, player_initiative=player_initiative, opponent_initiative=opponent_initiative, round_result=round_result)
 
 
 @rounds_blueprint.route('/game=<game_id>/player=<player>/roll', methods=['POST'])

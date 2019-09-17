@@ -141,6 +141,12 @@
 
     const initiative = {{ player_initiative }}
 
+    const result = {{ round_result or 'null'}}
+
+    if (result) {
+        $('#battle-btn').prop('disabled', true)
+    }
+
     //disable select buttons if stat boosters submitted
     //and if player_x_initiative not 0
     if (initiative) {
