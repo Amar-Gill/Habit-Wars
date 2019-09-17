@@ -6,8 +6,9 @@ from models.log_habit import LogHabit
 from models.game import Game
 from models.round import Round
 from models.habit import Habit
-import peewee as pw
 from config import Config
+import peewee as pw
+import random
 
 
 rounds_blueprint = Blueprint('rounds',
@@ -15,7 +16,7 @@ rounds_blueprint = Blueprint('rounds',
                              template_folder='templates')
 
 
-@rounds_blueprint.route('/game=1/show')
+@rounds_blueprint.route('/game=1/show', methods=['GET'])
 # def show(game_id):
 def show():
 
@@ -44,11 +45,13 @@ def show():
         roll_array = round.player_1_rolls
         player_stats = round.player_1_stats
         player_initiative = round.player_1_initiative
+        opponent_initiative = round.player_2_initiative
     else:
         player_variable = 2
         roll_array = round.player_2_rolls
         player_stats = round.player_2_stats
         player_initiative = round.player_2_initiative
+        opponent_initiative = round.player_1_initiative
 
     # querydb get habits with user_id==current user AND game_id==game_id
     # current_user_habit_array = Habit.select().where((Habit.user_id == current_user.id) & (Habit.game_id == game_id))
@@ -71,7 +74,7 @@ def show():
             dice_array += [1]
             num_dice += 1
 
-    return render_template('rounds/show.html', num_dice=num_dice, dice_array=dice_array, player_variable=player_variable, game_id=game_id, roll_array=roll_array, player_stats=player_stats, player_initiative=player_initiative)
+    return render_template('rounds/show.html', num_dice=num_dice, dice_array=dice_array, player_variable=player_variable, game_id=game_id, roll_array=roll_array, player_stats=player_stats, player_initiative=player_initiative, opponent_initiative=opponent_initiative)
 
 
 @rounds_blueprint.route('/game=<game_id>/player=<player>/roll', methods=['POST'])
@@ -117,3 +120,107 @@ def submit_stats(game_id, player):
         round.save()
 
     return redirect('round/game=1/show')
+
+@rounds_blueprint.route('/game=<game_id>/player=<player>/battle', methods=['POST'])
+def battle(game_id, player):
+
+    game = Game.get_by_id(1)
+    
+    # get round instance - do we need game_id????
+    round = Round.get_by_id(1)
+
+    player_initiative = int(request.form.get('initiative_input'))
+
+    if player == '1':
+        round.player_1_initiative = player_initiative
+        round.save()
+    else:
+        round.player_2_initiative = player_initiative
+        round.save()
+
+    # algorithm to calculate winner
+    if (round.player_1_initiative > 0) and (round.player_2_initiative > 0):
+
+        player_1_initiative = round.player_1_initiative
+        player_2_initiative = round.player_2_initiative
+
+        if player_1_initiative == player_2_initiative:
+            if random.random() < 0.5:
+                first_attack = 1
+            else:
+                first_attack = 2
+        elif player_1_initiative > player_2_initiative:
+            first_attack = 1
+        else:
+            first_attack = 2
+
+        p1_attack = round.player_1_stats[0]
+        p1_hp = round.player_1_stats[1]
+        p1_luck = round.player_1_stats[2]
+
+        p2_attack = round.player_2_stats[0]
+        p2_hp = round.player_2_stats[1]
+        p2_luck = round.player_2_stats[2]
+
+        while (p1_hp > 0 or p2_hp > 0):
+            # if player 1 goes first
+            if first_attack == 1:
+                # check if critical hit
+                if random.random()*100 < p1_luck:
+                    p1_damage = p1_attack*2
+                else:
+                    p1_damage = p1_attack
+                round.player_1_dmg_array.append(p1_damage)
+                round.save()
+
+                # check if p2 alive
+                p2_hp = p2_hp - p1_damage
+                if p2_hp < 0:
+                    round.result = User.get_by_id(game.player_1_id)
+                    round.save()
+                    break
+
+                # repeat for p2
+                if random.random()*100 < p2_luck:
+                    p2_damage = p2_attack*2
+                else:
+                    p2_damage = p2_attack
+                round.player_2_dmg_array.append(p2_damage)
+                round.save()
+
+                # check if p1 alive
+                p1_hp = p1_hp - p2_damage
+                if p1_hp < 0:
+                    round.result = User.get_by_id(game.player_2_id)
+                    round.save()
+            else:
+                if random.random()*100 < p2_luck:
+                    p2_damage = p2_attack*2
+                else:
+                    p2_damage = p2_attack
+                round.player_2_dmg_array.append(p2_damage)
+                round.save()
+
+                # check if p1 alive
+                p1_hp = p1_hp - p2_damage
+                if p1_hp < 0:
+                    round.result = User.get_by_id(game.player_2_id)
+                    round.save()
+                    break
+
+                if random.random()*100 < p1_luck:
+                    p1_damage = p1_attack*2
+                else:
+                    p1_damage = p1_attack
+                round.player_1_dmg_array.append(p1_damage)
+                round.save()
+
+                # check if p2 alive
+                p2_hp = p2_hp - p1_damage
+                if p2_hp < 0:
+                    round.result = User.get_by_id(game.player_1_id)
+                    round.save()
+
+    
+    return redirect('round/game=1/show')
+
