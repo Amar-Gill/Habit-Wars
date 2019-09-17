@@ -141,6 +141,7 @@ def battle(game_id, player):
         round.save()
 
     # algorithm to calculate winner
+    # only execute if both players initiatives have been rolled (therefore both > 0)
     if (round.player_1_initiative > 0) and (round.player_2_initiative > 0):
 
         player_1_initiative = round.player_1_initiative
@@ -164,7 +165,8 @@ def battle(game_id, player):
         p2_hp = round.player_2_stats[1]
         p2_luck = round.player_2_stats[2]
 
-        while (p1_hp > 0 or p2_hp > 0):
+        # determine winner of round
+        while (p1_hp > 0 and p2_hp > 0):
             # if player 1 goes first
             if first_attack == 1:
                 # check if critical hit
@@ -180,6 +182,8 @@ def battle(game_id, player):
                 if p2_hp < 0:
                     round.result = User.get_by_id(game.player_1_id)
                     round.save()
+                    game.player_1_score +=1
+                    game.save()
                     break
 
                 # repeat for p2
@@ -195,7 +199,10 @@ def battle(game_id, player):
                 if p1_hp < 0:
                     round.result = User.get_by_id(game.player_2_id)
                     round.save()
-            else:
+                    game.player_2_score += 1
+                    game.save()
+                    break
+            else: # if player 2 attacks first
                 if random.random()*100 < p2_luck:
                     p2_damage = p2_attack*2
                 else:
@@ -208,6 +215,8 @@ def battle(game_id, player):
                 if p1_hp < 0:
                     round.result = User.get_by_id(game.player_2_id)
                     round.save()
+                    game.player_2_score += 1
+                    game.save()
                     break
 
                 if random.random()*100 < p1_luck:
@@ -222,6 +231,8 @@ def battle(game_id, player):
                 if p2_hp < 0:
                     round.result = User.get_by_id(game.player_1_id)
                     round.save()
+                    game.player_1_score += 1
+                    game.save()
 
     
     return redirect('round/game=1/show')
