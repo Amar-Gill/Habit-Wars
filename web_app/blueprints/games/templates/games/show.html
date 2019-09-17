@@ -1,0 +1,82 @@
+{% extends '_layout.html' %}
+
+
+{% block title %}
+Your proDUCKtive war
+{% endblock %}
+
+{% block content %}
+
+<div class="container justify-content-center">
+
+    <h1>Your proDUCKtivity war</h1>
+
+    <!-- Player 1 Habits -->
+    <div id="container" class="d-flex justify-content-between">
+        <div class="col-5" id="p1-habits">
+            <img class="w-100" src="../../../../static/img/game-duck-2.jpg">
+            <h3>Your habits</h3>
+            {% for i in range(0, length_habit_list)|reverse %}
+            <div class="habit">
+                <p>{{user_habits[i].name}}</p>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="{{rounded_progress[i]}}" aria-valuemin="0"
+                        aria-valuemax="100" style="width: {{rounded_progress[i]}}%">
+                    </div>
+                </div>
+                <form>
+                    <input type="file" accept="image/*" capture="camera" value="Add photo">
+                    <input type="submit" value="Habit done">
+                </form>
+
+            </div>
+            {% endfor %}
+        </div>
+
+
+
+        <!-- Player 2 habits -->
+
+        <div class="col-5" id="p1-habits">
+            <img class="w-100" src="../../../../static/img/game-duck-1.jpg">
+            <h3>Opponent habits</h3>
+            <div class="habit">
+                <p>Habit 1</p>
+                <div class="progress">
+                    <div class="progress-bar testbar" role="progressbar" aria-valuenow="25" aria-valuemin="0"
+                        aria-valuemax="100" style="width: 25%;">
+                        <span class="sr-only">73% Complete</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="habit">
+                <p>Habit 2</p>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="25" aria-valuemin="0"
+                        aria-valuemax="100" style="width: 25%;">
+                        <span class="sr-only">73% Complete</span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="habit">
+                <p>Habit 3</p>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="25" aria-valuemin="0"
+                        aria-valuemax="100" style="width: 25%;">
+                        <span class="sr-only">73% Complete</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id='game_history'>
+        <h2>Battle history</h2>
+    </div>
+</div>
+{% endblock %}
+
