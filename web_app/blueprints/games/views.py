@@ -72,3 +72,12 @@ def show(username, game_id):
 
 
     return render_template('games/show.html', username = user.username, user_habits = user_habits, length_habit_list=length_habit_list, rounded_progress = rounded_progress)
+
+@games_blueprint.route('/<username>/index')
+def index(username):
+    user = User.get_or_none(User.username == username)
+
+    # Get all active games
+    games = Game.select().where((Game.player_1_id == user.id) | (Game.player_2_id == user.id))
+
+    return render_template('games/index.html', games=games, username=username)
