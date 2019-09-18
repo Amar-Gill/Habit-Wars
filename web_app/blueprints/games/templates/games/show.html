@@ -18,7 +18,7 @@ Your proDUCKtive war
             <h3>Your habits</h3>
             {% for i in range(0, length_habit_list)|reverse %}
             <div class="habit">
-                <p>{{user_habits[i].name}}</p>
+                <p>{{user_habits[i].name}}! {{user_more_to_go[i]}} more to go!</p>
                 <div class="progress">
                     <div class="progress-bar" role="progressbar" aria-valuenow="{{rounded_progress[i]}}"
                         aria-valuemin="0" aria-valuemax="100" style="width: {{rounded_progress[i]}}%">

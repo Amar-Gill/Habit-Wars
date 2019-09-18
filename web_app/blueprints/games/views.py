@@ -27,18 +27,24 @@ def show(username, game_id):
     user_habits = Habit.select().where((Habit.game_id == game_id) & (Habit.user_id == user.id))
     length_habit_list = len(user_habits)
 
-
     #progress bars
 
     progress = []
+    user_more_to_go = []
+
+
 
     for habit in user_habits:
         approved_logs = LogHabit.select().where((LogHabit.sender_id == user.id) & (LogHabit.habit_id == habit.id) & (LogHabit.approved == True) & (LogHabit.game_round_id == 2))        
         logged_habits = len(approved_logs)
         percentage = logged_habits / habit.frequency * 100
         progress.append(percentage)
+        leftover = habit.frequency - logged_habits
+        user_more_to_go.append(leftover)
 
+    print(user_more_to_go)
     rounded_progress = [round(freq, 0) for freq in progress]
+
 
     #Player 2
 
@@ -68,6 +74,7 @@ def show(username, game_id):
                             player_2_username = player_2_username,
                             player2_habits = player2_habits,
                             p2_habit_length = p2_habit_length,
-                            rounded_p2_progress = rounded_p2_progress)
+                            rounded_p2_progress = rounded_p2_progress,
+                            user_more_to_go = user_more_to_go)
 
 #Dont forget to change game round id
