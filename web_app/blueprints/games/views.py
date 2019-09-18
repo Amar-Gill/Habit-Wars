@@ -18,6 +18,8 @@ games_blueprint = Blueprint('games',
 
 @games_blueprint.route('/<username>/<game_id>', methods=["GET"])
 def show(username, game_id):
+
+    #Player 1
     user = User.get_or_none(User.username == username)    
     game = Game.get_or_none(Game.id == game_id)
 
@@ -26,7 +28,7 @@ def show(username, game_id):
     length_habit_list = len(user_habits)
 
 
-    #To render progress bar
+    #progress bars
 
     progress = []
 
@@ -38,5 +40,21 @@ def show(username, game_id):
         rounded_progress = [round(freq, 0) for freq in progress]
         print(rounded_progress)
 
+    #Player 2
 
-    return render_template('games/show.html', username = user.username, user_habits = user_habits, length_habit_list=length_habit_list, rounded_progress = rounded_progress)
+    print(game.player_2_id)
+    player_2 = User.get_or_none(User.id == game.player_2_id)
+    player_2_username = player_2.username
+
+    player2_habits = Habit.select().where((Habit.game_id == game_id) & (Habit.user_id == player_2.id))
+    p2_habit_length = len(player2_habits)
+    print(p2_habit_length)
+
+    return render_template('games/show.html', 
+                            username = user.username, 
+                            user_habits = user_habits, 
+                            length_habit_list=length_habit_list, 
+                            rounded_progress = rounded_progress, 
+                            player_2_username = player_2_username,
+                            player2_habits = player2_habits,
+                            p2_habit_length = p2_habit_length)
