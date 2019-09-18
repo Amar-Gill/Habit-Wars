@@ -8,3 +8,7 @@ from config import Config
 log_habits_blueprint = Blueprint('log_habits',
                             __name__,
                             template_folder='templates')
+
+@log_habits_blueprint.route('/create')
+def create():
+    pass

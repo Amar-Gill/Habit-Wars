@@ -19,9 +19,9 @@
         {% for i in range(0, num_dice) %}
         <div class="col dice-box">
             {% if roll_array[i] != 0 %}
-            <button type='submit' class='dice-btn' disabled>
-                {{roll_array[i]}}
-            </button>
+            
+            <img class ='dice-btn' src='/static/images/dice-images/d-{{roll_array[i]}}.png'>
+           
             {% else %}
             <form action={{ url_for('rounds.roll_dice', game_id = game_id, player=player_variable)}} method="POST">
                 <input value='' type='hidden' name='roll_value'>
@@ -275,6 +275,14 @@
         margin: 8px;
     }
 
+    .dice-box img {
+        max-height: 100%;
+        max-width: 100%;
+        height:auto;
+        margin: auto;
+        
+    }
+
     .stat-row {
         background-color: palevioletred;
         margin-top: 4px;
@@ -292,6 +300,7 @@
         height: 100%;
         background-color: pink;
     }
+
 </style>
 
 {% endblock %}
