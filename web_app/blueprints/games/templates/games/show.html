@@ -11,7 +11,7 @@ Your proDUCKtive war
 
     <h1>Your proDUCKtivity war</h1>
 
-    <!-- Player 1 Habits -->
+    <!-- Active User Habits -->
     <div id="container" class="d-flex justify-content-between">
         <div class="col-5" id="p1-habits">
             <img class="w-100" src="../../../../static/img/game-duck-2.jpg">
@@ -37,17 +37,17 @@ Your proDUCKtive war
 
 
 
-        <!-- Player 2 habits -->
+        <!-- Opponent habits -->
 
         <div class="col-5" id="p1-habits">
             <img class="w-100" src="../../../../static/img/game-duck-1.jpg">
-            <h3>{{player_2_username}}'s habits</h3>
-            {% for i in range(0, p2_habit_length)|reverse %}
+            <h3>{{opponent_username}}'s habits</h3>
+            {% for i in range(0, opponent_habit_length)|reverse %}
             <div class="habit">
-                <p>{{player2_habits[i].name}}</p>
+                <p>{{opponent_habits[i].name}}</p>
                 <div class="progress">
-                    <div class="progress-bar testbar" role="progressbar" aria-valuenow="{{rounded_p2_progress}}" aria-valuemin="0"
-                        aria-valuemax="100" style="width: {{rounded_p2_progress[i]}}%">
+                    <div class="progress-bar testbar" role="progressbar" aria-valuenow="{{rounded_opponent_progress}}" aria-valuemin="0"
+                        aria-valuemax="100" style="width: {{rounded_opponent_progress[i]}}%">
                         <span class="sr-only">73% Complete</span>
                     </div>
                 </div>
