@@ -48,8 +48,8 @@ def load_user(user_id):
 @celery.task(name='app.async_create_round')
 def async_create_round(game_id):
 
-    # get time delta to sunday midnight ( monday 00:00:00 )
-    present_time = datetime.now()
+    # get time delta to sunday midnight ( monday 00:00:00 ) in seconds
+    present_time = datetime.utcnow()
     sec_per_day = 24*60*60
     delta = (7 - present_time.weekday() )*sec_per_day - present_time.hour*60*60 - present_time.minute*60 - present_time.second
 
@@ -62,5 +62,5 @@ def async_create_round(game_id):
 
     # start recursive background task to execute on Monday 00:00:00 - which recalls round.create
     # for development purposes set timedelta = 30s
-    async_create_round.apply_async( (game_id), eta = present_time + timedelta(seconds = 30) )
+    async_create_round.apply_async((game_id,), countdown = delta )
 

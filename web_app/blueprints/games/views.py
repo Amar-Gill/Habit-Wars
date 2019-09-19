@@ -31,7 +31,9 @@ def create_new_game():
     new_game = Game(player_1 = player_1, player_2 = player_2)
     new_game.save()
     # start asynchronus loop for rounds - first call beginning immediately
-    async_create_round.delay(new_game.id)
+    # THIS IS FOR DEVELOPMENT PURPOSES ONLY
+    # NEED TO CALL THIS FUNCTION WHEN NEW GAME IS ACCEPTED BY OPPONENT
+    # async_create_round.delay(new_game.id)
 
     habit_a = Habit(game = new_game, user = player_1, 
     name = request.form["habit_1_name"], 
