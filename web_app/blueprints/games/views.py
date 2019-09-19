@@ -13,15 +13,15 @@ from models.log_habit import LogHabit
 from app import async_create_round
 
 
-
-
 games_blueprint = Blueprint('games',
                             __name__,
                             template_folder='templates')
 
+
 @games_blueprint.route("/new_game")
 def new_game_page():
     return render_template('games/new_game_page.html')
+
 
 @games_blueprint.route('create_new_games', methods=['POST', 'GET'])
 def create_new_game():
@@ -88,15 +88,19 @@ def show(username, game_id):
 
     # check is active user is player_1 or player_2 for the game
     if user.id == game.player_1_id:
+        active_user = 1
         opponent = User.get_or_none(User.id == game.player_2_id)
     else:
+        active_user = 2
         opponent = User.get_or_none(User.id == game.player_1_id)
 
 
     opponent_username = opponent.username
-
     opponent_habits = Habit.select().where((Habit.game_id == game_id) & (Habit.user_id == opponent.id))
     opponent_habit_length = len(opponent_habits)
+
+    # check if game has been accepted by player_2 or not
+    game_accepted = game.accepted
 
     #Progress bars
 
@@ -120,14 +124,14 @@ def show(username, game_id):
                             opponent_habit_length = opponent_habit_length,
                             rounded_opponent_progress = rounded_opponent_progress,
                             user_more_to_go = user_more_to_go,
-                            game_id = game.id)
+                            game_id = game.id,
+                            game_accepted = game_accepted,
+                            active_user=active_user)
 
 
-
-
-
-
-    return render_template('games/show.html', username = user.username, user_habits = user_habits, length_habit_list=length_habit_list, rounded_progress = rounded_progress)
+@games_blueprint.route('/<game_id>/accept_match', methods=["POST"])
+def accept_match(game_id):
+    pass
 
 @games_blueprint.route('/<username>/index')
 def index(username):

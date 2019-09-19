@@ -9,12 +9,30 @@ Your proDUCKtive war
 
 <div class="container justify-content-center">
 
+    <!-- check if game accepted -->
+    {% if not game_accepted %}
+
+        <!-- check if user is p1 or p2 -->
+        {% if active_user == 2 %}
+            <h1> BLAH has challenged you to a Habit War! Click the button to accept =]</h1>
+            <form>
+                <button>LITLIT</button>
+            </form>
+        {% else %}
+            <h1 id='waiting-header'>Waiting for Player 2 to accept your challenge!</h1>
+            <img id="shuriken" align="middle" src="/static/img/ninja-shuriken.png"/>
+            <div id="attribution-tag">Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+        {% endif %}
+
+    {% else %}
+
+    <!-- Page state when game is accepted -->
     <h1>Your proDUCKtivity war</h1>
 
     <!-- Active User Habits -->
     <div id="container" class="d-flex justify-content-between">
         <div class="col-5" id="p1-habits">
-            <img class="w-100" src="../../../../static/img/game-duck-2.jpg">
+            <img class="w-100" src="/static/img/game-duck-2.jpg">
             <h3>Your habits</h3>
             {% for i in range(0, length_habit_list)|reverse %}
             <div class="habit">
@@ -40,7 +58,7 @@ Your proDUCKtive war
         <!-- Opponent habits -->
 
         <div class="col-5" id="p1-habits">
-            <img class="w-100" src="../../../../static/img/game-duck-1.jpg">
+            <img class="w-100" src="/static/img/game-duck-1.jpg">
             <h3>{{opponent_username}}'s habits</h3>
             {% for i in range(0, opponent_habit_length)|reverse %}
             <div class="habit">
@@ -60,5 +78,39 @@ Your proDUCKtive war
     <div id='game_history'>
         <h2>Battle history</h2>
     </div>
+
+    {% endif %}
+
 </div>
+
+<style>
+
+#waiting-header {
+    margin-bottom: 16vh;
+}
+
+#shuriken {
+    width: 64vw;
+    margin: auto;
+    display: block;
+    
+    animation-name: spinning;
+    animation-duration: 2.5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    }
+
+#attribution-tag {
+    bottom: 2vh;
+    position: absolute;
+}
+
+@keyframes spinning {
+
+    100% { transform: rotate(360deg);}
+
+}
+
+</style>
+
 {% endblock %}
