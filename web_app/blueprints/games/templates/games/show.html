@@ -12,17 +12,89 @@ Your proDUCKtive war
     <!-- check if game accepted -->
     {% if not game_accepted %}
 
-        <!-- check if user is p1 or p2 -->
-        {% if active_user == 2 %}
-            <h1> BLAH has challenged you to a Habit War! Click the button to accept =]</h1>
-            <form>
-                <button>LITLIT</button>
-            </form>
-        {% else %}
-            <h1 id='waiting-header'>Waiting for Player 2 to accept your challenge!</h1>
-            <img id="shuriken" align="middle" src="/static/img/ninja-shuriken.png"/>
-            <div id="attribution-tag">Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
-        {% endif %}
+    <!-- check if user is p1 or p2 -->
+    {% if active_user == 2 %}
+    <form id='accept-form' action={{ url_for("habits.create", username=username, game_id=game_id)}} method="POST">
+        <div class="card">
+            <div class="card-body">
+                <h4 class='card-title'> BLAH has challenged you to a Habit War!</h4>
+                <h6 class="card-subtitle text-muted">Accept or decline with the form below.</h6>
+                <hr>
+                
+                <!-- <label class='ml-auto'> Select Frequency</label> -->
+                <div class="form-row">
+                    <div class="form-group col-7">
+                        <label for="habit-1-value"> Habit 1</label>
+                        <input id="habit-1-value" name='habit-1-value' class="form-control" type='text'>
+                    </div>
+                    <div class="form-group col-5">
+                        <label for="habit-1-frequency">Weekly Goal</label>
+                        <select id="habit-1-frequency" name="habit-1-frequency" class="custom-select">
+                            <option value='0' selected disabled>Choose...</option>
+                            <option value='1'>1</option>
+                            <option value='2'>2</option>
+                            <option value='3'>3</option>
+                            <option value='4'>4</option>
+                            <option value='5'>5</option>
+                            <option value='6'>6</option>
+                            <option value='7'>7</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-7">
+                        <label for="habit-2-value"> Habit 2</label>
+                        <input id="habit-2-value" name='habit-2-value' class="form-control" type='text'>
+                    </div>
+                    <div class="form-group col-5">
+                        <label for="habit-2-frequency">Weekly Goal</label>
+                        <select id="habit-2-frequency" name="habit-2-frequency" class="custom-select">
+                            <option value='0' selected disabled>Choose...</option>
+                            <option value='1'>1</option>
+                            <option value='2'>2</option>
+                            <option value='3'>3</option>
+                            <option value='4'>4</option>
+                            <option value='5'>5</option>
+                            <option value='6'>6</option>
+                            <option value='7'>7</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-7">
+                        <label for="habit-3-value"> Habit 3</label>
+                        <input id="habit-3-value" name='habit-3-value' class="form-control" type='text'>
+                    </div>
+                    <div class="form-group col-5">
+                        <label for="habit-3-frequency">Weekly Goal</label>
+                        <select id="habit-3-frequency" name="habit-3-frequency" class="custom-select">
+                            <option value='0' selected disabled>Choose...</option>
+                            <option value='1'>1</option>
+                            <option value='2'>2</option>
+                            <option value='3'>3</option>
+                            <option value='4'>4</option>
+                            <option value='5'>5</option>
+                            <option value='6'>6</option>
+                            <option value='7'>7</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer d-flex flex-row justify-content-around">
+                <input value='Accept' type='submit' class='btn btn-primary'>
+                <input value='Decline' type='submit' class='btn btn-danger'>
+            </div>
+        </div>
+    </form>
+    {% else %}
+    <h1 id='waiting-header'>Waiting for Player 2 to accept your challenge!</h1>
+    <img id="shuriken" src="/static/img/ninja-shuriken.png" />
+    <div id="attribution-tag">Icons made by <a href="https://www.flaticon.com/authors/freepik"
+            title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+    </div>
+    {% endif %}
 
     {% else %}
 
@@ -43,9 +115,10 @@ Your proDUCKtive war
                     </div>
                 </div>
                 <form action={{ url_for('log_habits.create')}} method="POST" enctype="multipart/form-data">
-                    <input name='image-for-{{user_habits[i].id}}' type="file" accept="image/*" capture="camera" value="Add photo">
+                    <input name='image-for-{{user_habits[i].id}}' type="file" accept="image/*" capture="camera"
+                        value="Add photo">
                     <input name='habit-id' type='hidden' value={{user_habits[i].id}}>
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                     <input type="submit" value="Habit done">
                 </form>
 
@@ -64,8 +137,8 @@ Your proDUCKtive war
             <div class="habit">
                 <p>{{opponent_habits[i].name}}</p>
                 <div class="progress">
-                    <div class="progress-bar testbar" role="progressbar" aria-valuenow="{{rounded_opponent_progress}}" aria-valuemin="0"
-                        aria-valuemax="100" style="width: {{rounded_opponent_progress[i]}}%">
+                    <div class="progress-bar testbar" role="progressbar" aria-valuenow="{{rounded_opponent_progress}}"
+                        aria-valuemin="0" aria-valuemax="100" style="width: {{rounded_opponent_progress[i]}}%">
                         <span class="sr-only">73% Complete</span>
                     </div>
                 </div>
@@ -83,34 +156,46 @@ Your proDUCKtive war
 
 </div>
 
+<script>
+    $("#accept-form").on('submit', (e) => {
+        e.preventDefault()
+        alert('Hello wang chun')
+    })
+</script>
+
 <style>
-
-#waiting-header {
-    margin-bottom: 16vh;
-}
-
-#shuriken {
-    width: 64vw;
-    margin: auto;
-    display: block;
-    
-    animation-name: spinning;
-    animation-duration: 2.5s;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
+    #waiting-header {
+        margin-bottom: 16vh;
     }
 
-#attribution-tag {
-    bottom: 2vh;
-    position: absolute;
-}
+    #shuriken {
+        width: 64vw;
+        margin: auto;
+        display: block;
 
-@keyframes spinning {
+        animation-name: spinning;
+        animation-duration: 2.5s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+    }
 
-    100% { transform: rotate(360deg);}
+    #attribution-tag {
+        bottom: 2vh;
+        position: absolute;
+    }
 
-}
+    /* #accept-form {
+    display: flex;
+    justify-content: space-around;
+} */
 
+    @keyframes spinning {
+
+        100% {
+            transform: rotate(360deg);
+        }
+
+    }
 </style>
 
 {% endblock %}

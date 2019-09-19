@@ -129,10 +129,6 @@ def show(username, game_id):
                             active_user=active_user)
 
 
-@games_blueprint.route('/<game_id>/accept_match', methods=["POST"])
-def accept_match(game_id):
-    pass
-
 @games_blueprint.route('/<username>/index')
 def index(username):
     user = User.get_or_none(User.username == username)

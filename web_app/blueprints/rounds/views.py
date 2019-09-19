@@ -103,7 +103,7 @@ def roll_dice(game_id, player):
         round.player_2_rolls[roll_index] = roll_value
         round.save()
 
-    return redirect('round/game=1/show')
+    return redirect( url_for('rounds.show', game_id = game_id))
 
 
 @rounds_blueprint.route('/game=<game_id>/player=<player>/submit_stats', methods=['POST'])
@@ -130,7 +130,7 @@ def submit_stats(game_id, player):
         round.player_2_initiative = -1
         round.save()
 
-    return redirect('round/game=1/show')
+    return redirect( url_for('rounds.show', game_id=game_id))
 
 
 @rounds_blueprint.route('/game=<game_id>/player=<player>/battle', methods=['POST'])
@@ -245,7 +245,7 @@ def battle(game_id, player):
                     game.save()
 
     
-    return redirect('round/game=1/show')
+    return redirect( url_for('rounds.show', game_id=game_id))
 
     
 
