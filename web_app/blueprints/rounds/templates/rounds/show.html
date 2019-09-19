@@ -1,0 +1,306 @@
+{% extends '_layout.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            Round: 1 <br>
+            You are player # {{player_variable}}
+        </div>
+        <div class="col">
+            Week Ending: DATE
+        </div>
+        <div class="col">
+            Dice: {{dice_array}}
+        </div>
+    </div>
+    <div class="row">
+        {% for i in range(0, num_dice) %}
+        <div class="col dice-box">
+            {% if roll_array[i] != 0 %}
+            
+            <img class ='dice-btn' src='/static/images/dice-images/d-{{roll_array[i]}}.png'>
+           
+            {% else %}
+            <form action={{ url_for('rounds.roll_dice', game_id = game_id, player=player_variable)}} method="POST">
+                <input value='' type='hidden' name='roll_value'>
+                <input value='' type='hidden' name='roll_index'>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <button type='submit' class='dice-btn'>
+                    ROLL DICE
+                </button>
+            </form>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    <div class="row stat-row">
+        <div class="col-4">ATTACK</div>
+        <div class="col-3" id='attack-stat'>{{player_stats[0]}}</div>
+        <div class="col-5">
+            <form id='attack-form' action="#">
+                <div class="form-group">
+                    <select id='attack-select' class='form-control'>
+                        <option value=0 selected>Apply Bonus</option>
+                        {% for i in range(0,num_dice) %}
+                        <option class='roll-option-{{i}}' value={{roll_array[i]}} id='attack-select-{{i}}'>
+                            {{roll_array[i]}}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row stat-row">
+        <div class="col-4">HITPOINTS</div>
+        <div class="col-3" id='hitpoints-stat'>{{player_stats[1]}}</div>
+        <div class="col-5">
+            <form id='hitpoints-form' action="#">
+                <div class="form-group">
+                    <select id='hitpoints-select' class='form-control'>
+                        <option value=0 selected>Apply Bonus</option>
+                        {% for i in range(0,num_dice) %}
+                        <option class='roll-option-{{i}}' value={{roll_array[i]}} id='hitpoints-select-{{i}}'>
+                            {{roll_array[i]}}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row stat-row">
+        <div class="col-4">LUCK</div>
+        <div class="col-3" id='luck-stat'>{{player_stats[2]}}</div>
+        <div class="col-5">
+            <form id='luck-form' action="#">
+                <div class="form-group">
+                    <select id='luck-select' class='form-control'>
+                        <option value=0 selected>Apply Bonus</option>
+                        {% for i in range(0,num_dice) %}
+                        <option class='roll-option-{{i}}' value={{roll_array[i]}} id='luck-select-{{i}}'>
+                            {{roll_array[i]}}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <form id='submit-stats-form'
+                action={{ url_for('rounds.submit_stats', game_id = game_id, player=player_variable) }} method="POST">
+                <div class="form-group">
+                    <input type='hidden' id='attack-input' name='attack-input'>
+                    <input type='hidden' id='hitpoints-input' name='hitpoints-input'>
+                    <input type='hidden' id='luck-input' name='luck-input'>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                    <button id='submit-stats-btn' class="btn btn-primary text-light game-btn">
+                        SUBMIT STAT BONUSES
+                    </button>
+
+                </div>
+            </form>
+        </div>
+        <div class="col">
+            <form id='submit-initiative-form' action={{ url_for('rounds.battle', game_id = game_id, player=player_variable) }} method="POST">
+                <div class="form-group">
+                    <input type='hidden' id='initiative_input' name='initiative_input'>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                    <button id='battle-btn' class="btn btn-danger text-light game-btn">
+                        ROLL INITIATIVE AND BATTLE
+                    </button>
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="battle-box">
+                {% if player_initiative > 0 %}
+                    {% if opponent_initiative <= 0 %}
+                        Waiting for opponent to begin battle
+                    {% else %}
+                        LET BATTLE BE JOINED
+                    {% endif %}
+                {% else %}
+                    select stat boosters and roll initiative to begin battle
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const diceStatus = [...{{ dice_array }}]
+
+    const initiative = {{ player_initiative }}
+
+    const result = {{ round_result or 'null'}}
+
+    if (result) {
+        $('#battle-btn').prop('disabled', true)
+    }
+
+    //disable select buttons if stat boosters submitted
+    //and if player_x_initiative not 0
+    if (initiative) {
+        $('select').prop('disabled', true)
+        $('#submit-stats-btn').prop('disabled', true)
+    }
+
+    //disabling options for other select menus if option is selected in any select menu
+    let $selects = $('select');
+
+    $selects.on('change', function () {
+
+        // enable all options
+        $selects.find('option').prop('disabled', false);
+
+        // loop over each select, use its class name to 
+        // disable the options in the other selects
+        $selects.each(function () {
+            let selectIndex = this.options['selectedIndex']
+            let rollIndex = selectIndex - 1
+            $selects.not(this)
+                .find(`.roll-option-${rollIndex}`)
+                .prop('disabled', true);
+        });
+    });
+
+    //updating stats when booster selected
+    $('#attack-select').on('change', (e) => {
+        const multiplier = e.target.value
+        $("#attack-stat").html({{ player_stats[0]}} + 10 * multiplier) //can enter base stat from db if desired
+    })
+
+    $('#hitpoints-select').on('change', (e) => {
+        const multiplier = e.target.value
+        $("#hitpoints-stat").html({{ player_stats[1]}} + 10 * multiplier) //can enter base stat from db if desired
+    })
+
+    $('#luck-select').on('change', (e) => {
+        const multiplier = e.target.value
+        $("#luck-stat").html({{ player_stats[2]}} + 5 * multiplier) //can enter base stat from db if desired
+    })
+
+    //sending stat boosters to server
+    //maybe update initiative to 0? or 'pending'? for use with conditional rendering of elements
+    $("#submit-stats-btn").on('click', (e) => {
+        e.preventDefault()
+        const statsArray = [
+            parseInt($("#attack-stat").html()),
+            parseInt($("#hitpoints-stat").html()),
+            parseInt($("#luck-stat").html())
+        ]
+        $("#attack-input").val(statsArray[0])
+        $("#hitpoints-input").val(statsArray[1])
+        $("#luck-input").val(statsArray[2])
+        $("#submit-stats-form").submit()
+    })
+
+    //submit initiative roll data to server and calculate battle if opponent ready
+    $('#battle-btn').on('click', (e) => {
+        e.preventDefault()
+        $("#initiative_input").val(dice.roll())
+        $("#submit-initiative-form").submit()
+    })
+
+    //dice parameters
+    let dice = {
+        sides: 6,
+        roll: function () {
+            let randomNumber = Math.floor(Math.random() * this.sides) + 1;
+            return randomNumber;
+        }
+    }
+
+    //submit dice roll data to server
+    let diceButtons = document.getElementsByClassName('dice-btn')
+
+    for (let i = 0, l = diceButtons.length; i < l; i++) {
+        //apply class name to dice-btn forms
+        diceButtons[i].parentElement.classList.add(`dice-form-${i}`)
+
+        //add event listeners
+        diceButtons[i].addEventListener('click', (e) => {
+            e.preventDefault()
+            const submitForm = document.querySelector(`.dice-form-${i}`)
+            const rollValue = dice.roll()
+
+            //get children of form
+            const formChildren = submitForm.children
+
+            //update roll_value and roll_index form fields
+            formChildren[0].value = rollValue
+            formChildren[1].value = i
+
+            submitForm.submit()
+
+            //send roll_value to server to save in db via ajax
+            //ice boxed for now
+            // $.ajax({
+            //     type: 'POST',
+            //     url: "http://127.0.0.1:5000/round/roll",
+            //     data: JSON.stringify({
+            //         "roll_value": rollValue,
+            //         "roll_index": i
+            //     }),
+            //     error: (e) => {
+            //         console.log(e)
+            //     },
+            //     dataType: "json",
+            //     contentType: "application/json"
+            // })
+            //     .then((data) => {
+            //         diceStatus[i] = 0
+            //         e.target.disabled = true
+            //         e.target.innerHTML = rollValue
+            //         console.log(data)
+            //     })
+        })
+    }
+
+</script>
+
+<style>
+    .dice-box {
+        height: 20vh;
+        background-color: aquamarine;
+        margin: 8px;
+    }
+
+    .dice-box img {
+        max-height: 100%;
+        max-width: 100%;
+        height:auto;
+        margin: auto;
+        
+    }
+
+    .stat-row {
+        background-color: palevioletred;
+        margin-top: 4px;
+        margin-bottom: 4px;
+        height: 6vh;
+    }
+
+    .game-btn {
+        width: 90%;
+        height: 12vh;
+        white-space: normal;
+    }
+
+    .battle-box {
+        height: 100%;
+        background-color: pink;
+    }
+
+</style>
+
+{% endblock %}
