@@ -10,6 +10,7 @@ from models.user import User
 from models.game import Game
 from models.habit import Habit
 from models.log_habit import LogHabit
+from app import async_create_round
 
 
 
@@ -25,10 +26,14 @@ def new_game_page():
 @games_blueprint.route('create_new_games', methods=['POST', 'GET'])
 def create_new_game():
     
-    player_1 = User.get_or_none(User.username == "user3")
+    player_1 = User.get_or_none(User.username == "test")
     player_2 = User.get_or_none(User.username == request.form["p2_name"])
     new_game = Game(player_1 = player_1, player_2 = player_2)
     new_game.save()
+    # start asynchronus loop for rounds - first call beginning immediately
+    # THIS IS FOR DEVELOPMENT PURPOSES ONLY
+    # NEED TO CALL THIS FUNCTION WHEN NEW GAME IS ACCEPTED BY OPPONENT
+    # async_create_round.delay(new_game.id)
 
     habit_a = Habit(game = new_game, user = player_1, 
     name = request.form["habit_1_name"], 
