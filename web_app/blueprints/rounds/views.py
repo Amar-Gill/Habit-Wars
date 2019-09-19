@@ -7,6 +7,7 @@ from models.game import Game
 from models.round import Round
 from models.habit import Habit
 from config import Config
+from datetime import datetime, timedelta
 import peewee as pw
 import random
 
@@ -16,12 +17,11 @@ rounds_blueprint = Blueprint('rounds',
                              template_folder='templates')
 
 
-@rounds_blueprint.route('/game=1/show', methods=['GET'])
-# def show(game_id):
-def show():
+@rounds_blueprint.route('/show/<game_id>', methods=['GET'])
+def show(game_id):
 
     # hardcode game_id for now
-    game_id = 1
+    game_id = game_id
 
     # get game model object
     game = Game.get_by_id(game_id)
@@ -122,6 +122,7 @@ def submit_stats(game_id, player):
         round.save()
 
     return redirect('round/game=1/show')
+
 
 @rounds_blueprint.route('/game=<game_id>/player=<player>/battle', methods=['POST'])
 def battle(game_id, player):
@@ -236,4 +237,8 @@ def battle(game_id, player):
 
     
     return redirect('round/game=1/show')
+
+    
+
+
 
