@@ -16,12 +16,15 @@ games_blueprint = Blueprint('games',
                             template_folder='templates')
 
 
+
+#Dont forget to change game round id!!!!
 @games_blueprint.route('/<username>/<game_id>', methods=["GET"])
 def show(username, game_id):
 
+    game = Game.get_or_none(Game.id == game_id)
+
     #Player 1
     user = User.get_or_none(User.username == username)    
-    game = Game.get_or_none(Game.id == game_id)
 
     #Set up habit info
     user_habits = Habit.select().where((Habit.game_id == game_id) & (Habit.user_id == user.id))
@@ -31,8 +34,6 @@ def show(username, game_id):
 
     progress = []
     user_more_to_go = []
-
-
 
     for habit in user_habits:
         approved_logs = LogHabit.select().where((LogHabit.sender_id == user.id) & (LogHabit.habit_id == habit.id) & (LogHabit.approved == True) & (LogHabit.game_round_id == 2))        
@@ -75,6 +76,10 @@ def show(username, game_id):
                             player2_habits = player2_habits,
                             p2_habit_length = p2_habit_length,
                             rounded_p2_progress = rounded_p2_progress,
-                            user_more_to_go = user_more_to_go)
+                            user_more_to_go = user_more_to_go,
+                            game_id = game.id)
 
-#Dont forget to change game round id
+
+
+
+

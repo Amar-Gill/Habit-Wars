@@ -24,8 +24,10 @@ Your proDUCKtive war
                         aria-valuemin="0" aria-valuemax="100" style="width: {{rounded_progress[i]}}%">
                     </div>
                 </div>
-                <form>
-                    <input type="file" accept="image/*" capture="camera" value="Add photo">
+                <form action={{ url_for('log_habits.create')}} method="POST" enctype="multipart/form-data">
+                    <input name='image-for-{{user_habits[i].id}}' type="file" accept="image/*" capture="camera" value="Add photo">
+                    <input name='habit-id' type='hidden' value={{user_habits[i].id}}>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <input type="submit" value="Habit done">
                 </form>
 
