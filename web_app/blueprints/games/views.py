@@ -40,10 +40,9 @@ def create_new_game():
     else:
         player_2 = User.get_or_none(User.username == p2_name)
         new_game = Game(player_1 = player_1, player_2 = player_2)
-        new_game.save()
-    
+
     if (not habit_a_name )and (not habit_b_name) and (not habit_c_name):
-        flash('Select minimum one habit')
+        flash('Enter minimum one habit!')
         return redirect(url_for('games.new_game_page'))
 
     if habit_a_name:
@@ -54,6 +53,7 @@ def create_new_game():
             habit_a = Habit(game = new_game, user = player_1, 
             name = habit_a_name, 
             frequency= habit_a_frequency)
+            new_game.save()
             habit_a.save()
 
     if habit_b_name:
@@ -64,6 +64,7 @@ def create_new_game():
             habit_b = Habit(game = new_game, user = player_1, 
             name = habit_b_name, 
             frequency= habit_b_frequency)
+            new_game.save()
             habit_b.save()
 
     if habit_c_name:
@@ -74,6 +75,7 @@ def create_new_game():
             habit_c = Habit(game = new_game, user = player_1, 
             name = habit_c_name, 
             frequency= habit_c_frequency)
+            new_game.save()
             habit_c.save()
 
     return redirect(url_for('games.new_game_page'))

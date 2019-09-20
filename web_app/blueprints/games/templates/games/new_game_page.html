@@ -4,20 +4,25 @@
 
 <div class="row no-gutters" style="height: 100vh" >
     <div style="background-color: blue" class="col-12 col-md-6">
-        <h1>Player 1</h1>
-        <img src="../../../../static/img/No-profile.jpg" alt="User Profile Img">
+        <h1>User Name Here{{current_user.username}}</h1>
+        <img class="w-100" src="../../../../static/img/No-profile.jpg" alt="User Profile Img">
 
     </div>
 
     <div style="background-color: black; " class="col-12 col-md-6 row justify-content-center">
         <form action="{{ url_for('games.create_new_game') }}" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+            <div class="input-group" >
+                <input type="text" name="p2_name" placeholder="Your buddy's username" class="form-control col-md-8 ">
+            </div>
+
             <div class="input-group">
                 <input type="text" name="habit_1_name" placeholder="Habit 1" class="form-control col-md-8 ">
                 
                 <div class="form-group col-md-5" >
                     <select id="inputState" name="habit_1_value" class="form-control" >
-                        <option value='0' selected disabled>Choose...</option>
+                        <option value="0" selected disabled>Choose...</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -66,10 +71,6 @@
 
             </div>
 
-            <div class="input-group" >
-                <input type="text" name="p2_name" placeholder="Your buddy's username" class="form-control col-md-8 ">
-            </div>
-            
             <button type="submit" class="btn btn-primary" >Submit</button>
     
         </form>
