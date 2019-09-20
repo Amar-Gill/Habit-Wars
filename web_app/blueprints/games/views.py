@@ -10,10 +10,6 @@ from models.user import User
 from models.game import Game
 from models.habit import Habit
 from models.log_habit import LogHabit
-<<<<<<< HEAD
-=======
-from app import async_create_round
->>>>>>> 8c3311b888e38ca56e19351dbfa6f2e5375d2a7a
 
 
 games_blueprint = Blueprint('games',
