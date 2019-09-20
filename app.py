@@ -1,4 +1,5 @@
-from flask import Flask, redirect, url_for
+
+from flask import Flask, redirect, url_for, render_template, sessions
 from models.base_model import db
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager
@@ -11,6 +12,26 @@ import config
 import os
 
 load_dotenv()
+
+from passlib.hash import sha256_crypt
+import config
+import os
+
+
+password = sha256_crypt.encrypt("password")
+password2 = sha256_crypt.encrypt("password")
+
+print(password)
+print(password2)
+
+print(sha256_crypt.verify("password", password))
+		
+app = Flask(__name__)
+@app.route('/')
+def home():
+    return render_template('home.html')
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
 web_dir = os.path.join(os.path.dirname(
@@ -47,6 +68,7 @@ def load_user(user_id):
     return User.get_or_none(User.id == user_id)
 
 
+
 @celery.task(name='app.async_create_round')
 def async_create_round(game_id):
 
@@ -65,4 +87,3 @@ def async_create_round(game_id):
     # start recursive background task to execute on Monday 00:00:00 - which recalls round.create
     # for development purposes set timedelta = 30s
     async_create_round.apply_async((game_id,), countdown = delta )
-

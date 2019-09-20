@@ -5,12 +5,19 @@ import peewee as pw
 from config import Config
 
 
-users_blueprint = Blueprint('users',
+users_blueprint = Blueprint('users',                        
                             __name__,
                             template_folder='templates')
 
 @users_blueprint.route("/user_profile")
 def user_profile_page():
     return render_template('users/user_profile_page.html')
+
+@users_blueprint.route('/register', methods = ["GET"])
+def new():
+    return render_template('users/register.html')
+
+
+
 
 # @users_blueprint.route("/")
