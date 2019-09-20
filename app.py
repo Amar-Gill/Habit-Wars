@@ -6,9 +6,11 @@ from models.user import User
 from flask_celery import make_celery
 from models.round import Round
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
 import config
 import os
 
+load_dotenv()
 
 
 web_dir = os.path.join(os.path.dirname(
