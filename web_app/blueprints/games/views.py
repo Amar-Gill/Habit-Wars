@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, flash, abort, url_for
+from flask import Blueprint, render_template, request, redirect, flash, abort, url_for, jsonify
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 from models.game import Game
@@ -30,10 +30,7 @@ def create_new_game():
     player_2 = User.get_or_none(User.username == request.form["p2_name"])
     new_game = Game(player_1 = player_1, player_2 = player_2)
     new_game.save()
-    # start asynchronus loop for rounds - first call beginning immediately
-    # THIS IS FOR DEVELOPMENT PURPOSES ONLY
-    # NEED TO CALL THIS FUNCTION WHEN NEW GAME IS ACCEPTED BY OPPONENT
-    # async_create_round.delay(new_game.id)
+
 
     habit_a = Habit(game = new_game, user = player_1, 
     name = request.form["habit_1_name"], 
@@ -55,7 +52,7 @@ def create_new_game():
 
 
 #Dont forget to change game round id!!!!
-@games_blueprint.route('/<username>/<game_id>', methods=["GET"])
+@games_blueprint.route('/<username>/<game_id>', methods=["GET", "POST"])
 def show(username, game_id):
 
     game = Game.get_or_none(Game.id == game_id)

@@ -4,6 +4,7 @@ from werkzeug.utils import secure_filename
 from models.game import Game
 from models.habit import Habit
 from models.user import User
+from app import async_create_round
 import peewee as pw
 from config import Config
 
@@ -12,7 +13,8 @@ habits_blueprint = Blueprint('habits',
                             __name__,
                             template_folder='templates')
 
-@habits_blueprint.route('/create/<username>/<game_id>')
+#this route is only activated for p2 in a game to accept match and create habits
+@habits_blueprint.route('/create/<username>/<game_id>', methods=["POST"])
 def create(username, game_id):
     
     # get current game for the page
@@ -46,13 +48,42 @@ def create(username, game_id):
                                 name=habit_1_value,
                                 frequency=habit_1_frequency)
                 habit_1.save()
+        
+        # save habit only if field populated
+        if habit_2_value:
+            if not habit_2_frequency:
+                print('error')
+            else:
+                habit_2 = Habit(game=game,
+                                user=user,
+                                name=habit_2_value,
+                                frequency=habit_2_frequency)
+                habit_2.save()
+        
+        # save habit only if field populated
+        if habit_3_value:
+            if not habit_3_frequency:
+                print('error')
+            else:
+                habit_3 = Habit(game=game,
+                                user=user,
+                                name=habit_3_value,
+                                frequency=habit_3_frequency)
+                habit_3.save()
 
         # set game.accepted to True
         game.accepted = True
         game.save()
 
-        return redirect( url_for('games.show', username=username, game_id=game_id))
+        # start asynchronus loop for rounds - first call beginning immediately
+        async_create_round.delay(game_id)
+
+        return redirect(f'/game/{username}/{game_id}')
+        # return redirect(request.url)
+        # return render_template('games/show')
+        # return redirect( url_for('games.index', username=username))
 
     else:
-        game.accepted = False
-        game.save()
+        # destroy game
+        game.delete_instance(recursive=True)
+        return redirect( url_for('games.index', username=username))
