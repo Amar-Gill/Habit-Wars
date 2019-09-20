@@ -10,7 +10,10 @@ from models.user import User
 from models.game import Game
 from models.habit import Habit
 from models.log_habit import LogHabit
+<<<<<<< HEAD
+=======
 from app import async_create_round
+>>>>>>> 8c3311b888e38ca56e19351dbfa6f2e5375d2a7a
 
 
 games_blueprint = Blueprint('games',
@@ -26,27 +29,60 @@ def new_game_page():
 @games_blueprint.route('create_new_games', methods=['POST', 'GET'])
 def create_new_game():
     
-    player_1 = User.get_or_none(User.username == "test")
-    player_2 = User.get_or_none(User.username == request.form["p2_name"])
-    new_game = Game(player_1 = player_1, player_2 = player_2)
-    new_game.save()
+    player_1 = User.get_or_none(User.username == "user3")
+    p2_name = request.form["p2_name"]
 
+    habit_a_name = request.form.get('habit_1_name')
+    habit_a_frequency = request.form.get('habit_1_value')
+    habit_b_name = request.form.get('habit_2_name')
+    habit_b_frequency = request.form.get('habit_2_value')
+    habit_c_name = request.form.get('habit_3_name')
+    habit_c_frequency = request.form.get('habit_3_value')
+    
+    #error handle
+    if p2_name == "":
+        flash("Please enter a player username!")
+        return redirect(url_for('games.new_game_page'))
+    else:
+        player_2 = User.get_or_none(User.username == p2_name)
+        new_game = Game(player_1 = player_1, player_2 = player_2)
 
-    habit_a = Habit(game = new_game, user = player_1, 
-    name = request.form["habit_1_name"], 
-    frequency=request.form["habit_1_value"])
+    if (not habit_a_name )and (not habit_b_name) and (not habit_c_name):
+        flash('Enter minimum one habit!')
+        return redirect(url_for('games.new_game_page'))
 
-    habit_b = Habit(game = new_game, user = player_1, 
-    name = request.form["habit_2_name"], 
-    frequency=request.form["habit_2_value"])
+    if habit_a_name:
+        if not habit_a_frequency:
+            flash('Select how many times per week you wish to complete habit for habit 1')
+            return redirect(url_for('games.new_game_page'))
+        else:
+            habit_a = Habit(game = new_game, user = player_1, 
+            name = habit_a_name, 
+            frequency= habit_a_frequency)
+            new_game.save()
+            habit_a.save()
 
-    habit_c = Habit(game = new_game, user = player_1, 
-    name = request.form["habit_3_name"], 
-    frequency=request.form["habit_3_value"])
+    if habit_b_name:
+        if not habit_b_frequency:
+            flash('Select how many times per week you wish to complete habit for habit 2')
+            return redirect(url_for('games.new_game_page'))
+        else:
+            habit_b = Habit(game = new_game, user = player_1, 
+            name = habit_b_name, 
+            frequency= habit_b_frequency)
+            new_game.save()
+            habit_b.save()
 
-    habit_a.save()
-    habit_b.save()
-    habit_c.save()
+    if habit_c_name:
+        if not habit_c_frequency:
+            flash('Select how many times per week you wish to complete habit for habit 3')
+            return redirect(url_for('games.new_game_page'))
+        else:
+            habit_c = Habit(game = new_game, user = player_1, 
+            name = habit_c_name, 
+            frequency= habit_c_frequency)
+            new_game.save()
+            habit_c.save()
 
     return redirect(url_for('games.new_game_page'))
 
