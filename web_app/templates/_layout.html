@@ -14,11 +14,14 @@
     {% assets "home_js" %}
       <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
+    
 
-    <title>{% block title %}{% endblock %}</title>
+    {% block header %}{% endblock %}
+    <title>{% block title %}Productivity Wars{% endblock %}</title>
   </head>
 
     <body>
+      
       {% block content %}
       {% endblock %}
 
