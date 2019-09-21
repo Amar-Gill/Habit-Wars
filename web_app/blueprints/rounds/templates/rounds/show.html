@@ -3,32 +3,34 @@
 {% block content %}
 
 <div class="container">
-    <div class="row">
+    <div class="info-header row">
         <div class="col">
             Round: 1 <br>
-            You are player # {{player_variable}}
+            Player # {{player_variable}}
         </div>
         <div class="col">
-            Week Ending: DATE
+            Week Ending:<br>
+            DATE
         </div>
         <div class="col">
-            Dice: {{dice_array}}
+            Dice Rolls:
+            <br>{{num_dice}} / 3
         </div>
     </div>
     <div class="row">
         {% for i in range(0, num_dice) %}
-        <div class="col dice-box">
+        <div class="col d-flex flex-column justify-content-center dice-box">
             {% if roll_array[i] != 0 %}
             
-            <img class ='dice-btn' src='/static/images/dice-images/d-{{roll_array[i]}}.png'>
+            <img class ='dice-placeholder' src='/static/images/dice-images/d-{{roll_array[i]}}.png'>
            
             {% else %}
-            <form action={{ url_for('rounds.roll_dice', game_id = game_id, player=player_variable)}} method="POST">
+            <form class='mx-auto' action={{ url_for('rounds.roll_dice', game_id = game_id, player=player_variable)}} method="POST">
                 <input value='' type='hidden' name='roll_value'>
                 <input value='' type='hidden' name='roll_index'>
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-                <button type='submit' class='dice-btn'>
-                    ROLL DICE
+                <button type='submit' class='btn btn-info dice-placeholder text-dark'>
+                    ROLL<br>DICE
                 </button>
             </form>
             {% endif %}
@@ -41,8 +43,8 @@
         <div class="col-5">
             <form id='attack-form' action="#">
                 <div class="form-group">
-                    <select id='attack-select' class='form-control'>
-                        <option value=0 selected>Apply Bonus</option>
+                    <select id='attack-select' class=' custom-select form-control'>
+                        <option value=0 selected>Power Up</option>
                         {% for i in range(0,num_dice) %}
                         <option class='roll-option-{{i}}' value={{roll_array[i]}} id='attack-select-{{i}}'>
                             {{roll_array[i]}}
@@ -59,8 +61,8 @@
         <div class="col-5">
             <form id='hitpoints-form' action="#">
                 <div class="form-group">
-                    <select id='hitpoints-select' class='form-control'>
-                        <option value=0 selected>Apply Bonus</option>
+                    <select id='hitpoints-select' class='custom-select form-control'>
+                        <option value=0 selected>Power Up</option>
                         {% for i in range(0,num_dice) %}
                         <option class='roll-option-{{i}}' value={{roll_array[i]}} id='hitpoints-select-{{i}}'>
                             {{roll_array[i]}}
@@ -77,8 +79,8 @@
         <div class="col-5">
             <form id='luck-form' action="#">
                 <div class="form-group">
-                    <select id='luck-select' class='form-control'>
-                        <option value=0 selected>Apply Bonus</option>
+                    <select id='luck-select' class='custom-select form-control'>
+                        <option value=0 selected>Power Up</option>
                         {% for i in range(0,num_dice) %}
                         <option class='roll-option-{{i}}' value={{roll_array[i]}} id='luck-select-{{i}}'>
                             {{roll_array[i]}}
@@ -98,8 +100,8 @@
                     <input type='hidden' id='hitpoints-input' name='hitpoints-input'>
                     <input type='hidden' id='luck-input' name='luck-input'>
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-                    <button id='submit-stats-btn' class="btn btn-primary text-light game-btn">
-                        SUBMIT STAT BONUSES
+                    <button id='submit-stats-btn' class="btn btn-info text-dark game-btn">
+                        SUBMIT POWER UPS
                     </button>
 
                 </div>
@@ -110,7 +112,7 @@
                 <div class="form-group">
                     <input type='hidden' id='initiative_input' name='initiative_input'>
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-                    <button id='battle-btn' class="btn btn-danger text-light game-btn">
+                    <button id='battle-btn' class="btn btn-warning text-dark game-btn">
                         ROLL INITIATIVE AND BATTLE
                     </button>
 
@@ -118,22 +120,30 @@
             </form>
         </div>
     </div>
-    <div class="row">
-        <div class="col">
-            <div class="battle-box">
-                {% if player_initiative > 0 %}
-                    {% if opponent_initiative <= 0 %}
-                        Waiting for opponent to begin battle
-                    {% else %}
-                        LET BATTLE BE JOINED
-                    {% endif %}
+    
+        <div class="battle-box">
+            {% if player_initiative > 0 %}
+                {% if opponent_initiative <= 0 %}
+                <img id='duck-placeholder' src='/static/images/duck-images/duck-placeholder.png'/>
+                <div id='battle-label'>
+                    <h5>
+                        Waiting for opponent...
+                    </h5>
+                </div>
                 {% else %}
-                    select stat boosters and roll initiative to begin battle
+                    LET BATTLE BE JOINED (blood and guts are flying everywhere and absolute chaos ensues)
                 {% endif %}
+            {% else %}
+                <img id='duck-placeholder' src='/static/images/duck-images/duck-placeholder.png'/>
+                <div id='battle-label'>
+                    <h5>
+                        Apply power ups and roll initiative<br>to begin battle!
+                    </h5>
+                </div>
+            {% endif %}
 
-            </div>
         </div>
-    </div>
+        
 </div>
 
 <script>
@@ -143,7 +153,7 @@
 
     const result = {{ round_result or 'null'}}
 
-    if (result) {
+    if (initiative >= 0) {
         $('#battle-btn').prop('disabled', true)
     }
 
@@ -221,14 +231,14 @@
     }
 
     //submit dice roll data to server
-    let diceButtons = document.getElementsByClassName('dice-btn')
+    let dicePlaceHolders = document.getElementsByClassName('dice-placeholder')
 
-    for (let i = 0, l = diceButtons.length; i < l; i++) {
-        //apply class name to dice-btn forms
-        diceButtons[i].parentElement.classList.add(`dice-form-${i}`)
+    for (let i = 0, l = dicePlaceHolders.length; i < l; i++) {
+        //apply class name to dice-placeholder forms
+        dicePlaceHolders[i].parentElement.classList.add(`dice-form-${i}`)
 
         //add event listeners
-        diceButtons[i].addEventListener('click', (e) => {
+        dicePlaceHolders[i].addEventListener('click', (e) => {
             e.preventDefault()
             const submitForm = document.querySelector(`.dice-form-${i}`)
             const rollValue = dice.roll()
@@ -242,27 +252,6 @@
 
             submitForm.submit()
 
-            //send roll_value to server to save in db via ajax
-            //ice boxed for now
-            // $.ajax({
-            //     type: 'POST',
-            //     url: "http://127.0.0.1:5000/round/roll",
-            //     data: JSON.stringify({
-            //         "roll_value": rollValue,
-            //         "roll_index": i
-            //     }),
-            //     error: (e) => {
-            //         console.log(e)
-            //     },
-            //     dataType: "json",
-            //     contentType: "application/json"
-            // })
-            //     .then((data) => {
-            //         diceStatus[i] = 0
-            //         e.target.disabled = true
-            //         e.target.innerHTML = rollValue
-            //         console.log(data)
-            //     })
         })
     }
 
@@ -270,9 +259,10 @@
 
 <style>
     .dice-box {
-        height: 20vh;
-        background-color: aquamarine;
+        height: 12vh;
         margin: 8px;
+        border: solid aquamarine 2px;
+        border-radius: 16px;
     }
 
     .dice-box img {
@@ -280,14 +270,18 @@
         max-width: 100%;
         height:auto;
         margin: auto;
-        
     }
 
+
     .stat-row {
-        background-color: palevioletred;
+        color: aquamarine;
         margin-top: 4px;
         margin-bottom: 4px;
         height: 6vh;
+        border: solid aquamarine 2px;
+        border-radius: 16px;
+        margin-left: 1px;
+        margin-right: 1px;
     }
 
     .game-btn {
@@ -297,8 +291,34 @@
     }
 
     .battle-box {
-        height: 100%;
-        background-color: pink;
+        height: 44vh;
+        border: solid aquamarine 2px;
+        border-radius: 16px;
+        margin-bottom: 1vh;
+    }
+
+    #duck-placeholder {
+        max-height: 85%;
+        max-width: 85%;
+        height:auto;
+        margin: auto;
+        padding-top: 8vh;
+        padding-bottom: 4vh;
+        display: block;
+    }
+
+    #battle-label {
+        color: aquamarine;
+        text-align: center;
+    }
+
+    body {
+        background: linear-gradient(black, rgba(1, 3, 56, .4));
+    }
+
+    .info-header {
+        color:aquamarine;
+        height: 7vh;
     }
 
 </style>
