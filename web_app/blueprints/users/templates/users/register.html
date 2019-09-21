@@ -1,6 +1,7 @@
 {% extends '_layout.html' %}
 
 {% block content %}
+
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
@@ -16,58 +17,52 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="jumbotron">
             <h1>Register </h1>
-            
+
         </div>
-        <form action={{url_for("sessions.new")}} method="POST">
+        <form action={{url_for("users.create")}} method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <p style="color:red;">{{error}}</p>
             <div class="form-group">
-                
-                    <label for="InputE-mail">E-mail</label>
-                    <input type="text" class="form-control" name="e-mail" id="e-mail" placeholder="e-mail">
-                </div>
+
+                <label for="InputE-mail">E-mail</label>
+                <input type="text" class="form-control" name="e-mail" id="e-mail" placeholder="e-mail">
+            </div>
             <div class="form-group">
 
-                <label for="InputUsername">Username</label>    
+                <label for="InputUsername">Username</label>
                 <input type="text" class="form-control" name="username" id="username" placeholder="username">
             </div>
             <div class="form-group">
                 <label for="InputPassword">Password</label>
-                <input type="password" class="form-control"  name="password" id="password" placeholder="password">
+                <input type="password" class="form-control" name="password" id="password" placeholder="password">
             </div>
-            
-            <a href="/users/user_profile" align ="center" class="shop1">Register</a>
-            
+
+            <button type='submit' class="btn btn-primary">Register</button>
+
         </form>
 
-        
-        
-
-            </div>
-        </div>
+    </div>
+    </div>
     </div>
     <script>
-        $( "form" ).validate({
-        rules: {
-            username: {
-                 required: true
-               },
-            password: {
-                 required: true
-               },
+        $("form").validate({
+            rules: {
+                username: {
+                    required: true
+                },
+                password: {
+                    required: true
+                },
             }
-       });
+        });
     </script>
-    <script src="static/javascripts/fb_sdk.js"></script>
-    <script src="static/javascripts/fb_login.js"></script>
-
-    <form>
-        <input type="button" onClick='location.href="http://127.0.0.1:5000/users/user_profile"'/>
-     </form>
 
 </body>
+
 </html>
 {% endblock %}
