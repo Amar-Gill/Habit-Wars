@@ -131,7 +131,6 @@ def index(username):
 def show_approve(username, game_id):
     user = User.get_or_none(User.username == username)
     game = Game.get_or_none(Game.id == game_id)
-    print(game)
 
     habits = Habit.select().where(Habit.game_id == game_id)
     game_habits = []
@@ -142,11 +141,22 @@ def show_approve(username, game_id):
     to_approve = LogHabit.select().where((LogHabit.approved == False) & (LogHabit.receiver_id == user.id) & (LogHabit.habit_id in game_habits))
 
     to_approve_length = len(to_approve)
+    sender_ids = []
+    senders = []
+
+    for log in to_approve:
+        sender_ids.append(log.sender_id)
+    for id in sender_ids:
+        sender = User.get_or_none(User.id == id)
+        senders.append(sender.username)
+    
+    
 
     return render_template('games/approval.html', to_approve = to_approve,
                                                     to_approve_length = to_approve_length,
                                                     username = username,
-                                                    game_id = game_id)
+                                                    game_id = game_id,
+                                                    senders = senders)
 
 @games_blueprint.route('/<username>/<game_id>/approve', methods=["POST"])
 def approve(username, game_id):
@@ -163,6 +173,7 @@ def approve(username, game_id):
     return redirect(url_for('games.show', game_id = game_id, username = username ))
 
 
-
+    #Player bars dont change :(
+    
 
 

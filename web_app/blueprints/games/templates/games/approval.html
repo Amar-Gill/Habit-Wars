@@ -13,6 +13,8 @@ Approval page
         <h3 class="card-title">{{game.player_1.username}} vs. {{game.player_2.username}}</h3> 
         #}
         <hr>
+        <h3>{{senders[i]}} has sent you a habit-photo!</h3>
+        <h4>Do you approve?</h4>
         <div id="image-area" class="w-75 p-3 d-flex justify-content-center">
             <img width='30%' src="{{to_approve[i].image_path}}">
         </div>
@@ -21,7 +23,7 @@ Approval page
                 <input type='hidden' name="loghabit-ids" value="{{ to_approve[i].id }}">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <input type='submit' class='btn btn-info' value="Accept">
-                <input type='button' class='btn btn-info' value="Reject">
+                <a href="{{ url_for('games.show', username = username, game_id = game_id) }}"><button class='btn btn-info' >Reject</button></a>
             </form>
         </div>
     </div>
