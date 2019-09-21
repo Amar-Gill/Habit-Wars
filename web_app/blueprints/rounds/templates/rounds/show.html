@@ -131,7 +131,11 @@
                     </h5>
                 </div>
                 {% else %}
-                    LET BATTLE BE JOINED (blood and guts are flying everywhere and absolute chaos ensues)
+                <div id="battle-stage">
+                    <img src='/static/images/duck-images/duck-3.png'>
+                    <img src='/static/images/duck-images/duck-1.png'>
+                    
+                </div>
                 {% endif %}
             {% else %}
                 <img id='duck-placeholder' src='/static/images/duck-images/duck-placeholder.png'/>
@@ -296,6 +300,29 @@
         border-radius: 16px;
         margin-bottom: 1vh;
     }
+
+    #battle-stage {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    #battle-stage img {
+            
+            max-width: 25%;
+            
+    }
+
+    @media only screen and (max-width: 600px) {
+
+        #battle-stage img {
+            
+            max-width: 40%;
+            
+        }
+
+    }
+
+    
 
     #duck-placeholder {
         max-height: 85%;
