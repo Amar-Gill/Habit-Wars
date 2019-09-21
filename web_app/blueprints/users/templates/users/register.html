@@ -2,23 +2,7 @@
 
 {% block content %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <link rel="stylesheet" type="text/css" href="register.css">
-    <link type="text/css" rel="stylesheet" href="static/stylesheets/bootstrap.min.css">
-    <link type="text/css" rel="stylesheet" href="static/plugins/jquery.validate/jquery.validate.css">
-    <script src="static/javascripts/jquery.min.js"></script>
-    <script src="static/javascripts/bootstrap.min.js"></script>
-    <script src="static/plugins/jquery.validate/jquery.validate.min.js"></script>
-    <style>
-        .row-margin-top {
-            margin-top: 20px;
-        }
-    </style>
-</head>
 
-<body>
     <div class="container">
         <div class="jumbotron">
             <h1>Register </h1>
@@ -26,11 +10,10 @@
         </div>
         <form action={{url_for("users.create")}} method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-            <p style="color:red;">{{error}}</p>
             <div class="form-group">
 
                 <label for="InputE-mail">E-mail</label>
-                <input type="text" class="form-control" name="e-mail" id="e-mail" placeholder="e-mail">
+                <input type="text" class="form-control" name="email" id="e-mail" placeholder="e-mail">
             </div>
             <div class="form-group">
 
@@ -49,6 +32,13 @@
     </div>
     </div>
     </div>
+
+    <style>
+        .container {
+            height: 93vh;
+        }
+    </style>
+
     <script>
         $("form").validate({
             rules: {
@@ -62,7 +52,4 @@
         });
     </script>
 
-</body>
-
-</html>
 {% endblock %}

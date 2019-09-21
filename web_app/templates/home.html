@@ -2,12 +2,38 @@
 
 
 {% block head %}
-	
+
 {% endblock %}
 
 {% block title %}Home Page{% endblock %}
 
 {% block content %}
-<h1>HOME Page</h1>
-        
+<main height="100%">
+	<img id='home-icon' src='/static/images/duck-images/duck-placeholder.png'>
+
+</main>
+
+<style>
+	main {
+		height: 93vh;
+	}
+
+	#home-icon {
+		display: block;
+		margin: auto;
+		width: 32vw;
+		padding-top: 16vh;
+	}
+
+	@media only screen and (max-width: 600px) {
+
+		#home-icon {
+
+			width: 68vw;
+
+		}
+
+	}
+</style>
+
 {% endblock %}
