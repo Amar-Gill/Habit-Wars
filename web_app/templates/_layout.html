@@ -14,11 +14,23 @@
     {% assets "home_js" %}
       <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
+    
 
-    <title>{% block title %}{% endblock %}</title>
+    {% block header %}{% endblock %}
+    <title>{% block title %}Productivity Wars{% endblock %}</title>
   </head>
 
     <body>
+
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          {% for message in messages %}
+            {{ message }}
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+
       {% block content %}
 
       <!-- CONTENT HERE -->
