@@ -1,77 +1,35 @@
 {% extends '_layout.html' %}
+
 {% block content %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>Welcome back!</title>
-    <link type="text/css" rel="stylesheet" href="static/stylesheets/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="login.css">
-    <link type="text/css" rel="stylesheet" href="static/plugins/jquery.validate/jquery.validate.css">
-    <script src="static/javascripts/jquery.min.js"></script>
-    <script src="static/javascripts/bootstrap.min.js"></script>
-    <script src="static/plugins/jquery.validate/jquery.validate.min.js"></script>
-</head>
-
-<script>
-    $("form").validate({
-        rules: {
-            username: {
-                required: true,
-                UserNameExist: true
-            },
-            password: {
-                required: true,
-            },
-        }
-    });
-</script>
 
 <div class="container">
     <div class="jumbotron">
         <h1> Login </h1>
     </div>
 
-    <div class="form-group">
+    <form action = {{ url_for('sessions.create')}} method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <div class="form-group">
+            <label for="InputUsername">Username</label>
+            <input type="text" class="form-control" name="username" id="username" placeholder="username">
+        </div>
+    
+        <div class="form-group">
+            <label for="InputPassword">Password</label>
+            <input type="password" class="form-control" name="password" id="password" placeholder="password">
+        </div>
+    
+        <button type='submit' class='btn btn-info'>Log in</button>
+    </form>
 
-        <label for="InputUsername">Username</label>
-        <input type="text" class="form-control" name="username" id="username" placeholder="username">
-    </div>
-
-    <div class="form-group">
-        <label for="InputPassword">Password</label>
-        <input type="password" class="form-control" name="password" id="password" placeholder="password">
-    </div>
-
-    <a href="/users/user_profile" align="center" class="shop1">Login</a>
 
 </div>
 
 
-<script>
-    $.validator.addMethod('UserNameExist', function (value, element) {
-
-        var obj = {
-            username: $('#username').val().replace(/\s/g, "")
-        };
-        var data_json = JSON.stringify(obj);
-        var isSuccess = true;
-        $.ajax({
-            url: "/API_check_UserNameExist",
-            type: "POST",
-            data: data_json,
-            dataType: "json",
-            async: false,
-            contentType: "application/json",
-            success: function (data, textStatus, jqXHR) {
-                if (data == "11") {
-                    isSuccess = false;
-                }
-            }
-        });
-        return: "Success";
-    }, "UserName already exists.");
-</script>
-</body>
-
-</html>
+<style>
+        .container {
+            height: 93vh;
+        }
+    </style>
 {% endblock %}

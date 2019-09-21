@@ -22,6 +22,56 @@
 
     <body>
 
+        <nav class="navbar navbar-expand-md navbar-dark" style="background-color: #4a6271">
+            <a class="navbar-brand" href="/">
+              <img src="/static/images/duck-images/duck-placeholder.png" width="30" height="30" alt="">
+              Habit Wars
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+    
+            <div class="collapse navbar-collapse" id ='navbarSupportedContent'>
+              <ul class="navbar-nav ml-auto">
+                  <form action="#" class="form-inline my-2 my-lg-0">
+                      <input id='nav-search' class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                      <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                  {% if current_user.is_active %}
+                    <li class="nav-item">
+                      <a href={{ url_for('games.index', username=current_user.username)}} class="nav-link">
+                        Games
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href={{ url_for('users.user_profile_page', username=current_user.username)}} class="nav-link">
+                        Profile
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href={{ url_for('sessions.destroy')}} class="nav-link">
+                          Sign Out
+                        </a>
+                    </li>
+                  
+                  {% else %}
+                    <li class="nav-item">
+                      <a href="/users/register" class="nav-link">
+                        Register
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href='/sessions/new' class="nav-link">
+                        Sign In
+                      </a>
+                    </li>
+                {% endif %}
+                
+              </ul>
+            </div>
+    
+        </nav>
+
       {% with messages = get_flashed_messages() %}
         {% if messages %}
           {% for message in messages %}
@@ -32,8 +82,6 @@
 
 
       {% block content %}
-
-      <!-- CONTENT HERE -->
 
       
       {% endblock %}

@@ -2,66 +2,38 @@
 
 
 {% block head %}
-	<script src="static/javascripts/fb_sdk.js"></script>
-	<link rel="stylesheet" href="custom.css">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="fontawesome-free/css/all.min.css">
-	<link href="https://fonts.googleapis.com/css?family=Quicksand:600&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
-    <script>
-       function logout() {
-            FB.getLoginStatus(function(response) {
-                if (response.status === 'connected') {
-                    FB.logout(function (response) {});
-                }
-            });
-            location.replace("/logout");
-        }
-    </script>
+
 {% endblock %}
 
 {% block title %}Home Page{% endblock %}
 
 {% block content %}
+<main height="100%">
+	<img id='home-icon' src='/static/images/duck-images/duck-placeholder.png'>
 
-<title>Productivity Warz</title>
-	<link rel="stylesheet" href="style.css">
-	<link rel="stylesheet" href="fontawesome-free/css/all.min.css">
-	<link href="https://fonts.googleapis.com/css?family=Quicksand:600&display=swap" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
-	
-	<header>
-		
-		<div class="navigation">
-			<div class="logo">ProDucktivity Warz</div>
-			<div class="menu">
-				
-				<ul class="nav icon">
-					<li><a class="link" href="#"><i class="fas fa-search"></i></a></li>
-					<li><a class="link" href="#"><i class="fas fa-shopping-cart"></i></a></li>
-					<li><a class="link" href="#"><i class="fas fa-user"></i></a></li>
-				</ul>
-			</div>
-		</div>
+</main>
 
-		<div class="description">
-			<h1 align = "center">Habit tracking app</h1>
-			<p align = "center">Start playing game by choosing your opponent, create habits and challenge yourself!</p>
+<style>
+	main {
+		height: 93vh;
+	}
 
-			
-			<div id="button">
-			<a href="/users/register" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Register</a>
-			<a href="sessions/new" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Login</a>
-			</div>
-		
-		</div>
+	#home-icon {
+		display: block;
+		margin: auto;
+		width: 32vw;
+		padding-top: 16vh;
+	}
 
-		<div class="end-head">
-			<div class="post-navigation">
+	@media only screen and (max-width: 600px) {
 
-	</header>
+		#home-icon {
 
-<!-- </body> -->
-<!-- </html> -->
-        
+			width: 68vw;
+
+		}
+
+	}
+</style>
+
 {% endblock %}

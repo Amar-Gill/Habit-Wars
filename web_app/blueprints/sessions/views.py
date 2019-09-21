@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, flash, abort, url_for
-from flask_login import login_required, current_user
+from flask_login import login_user, logout_user, current_user
 from werkzeug.utils import secure_filename
+from werkzeug.security import check_password_hash
 import peewee as pw
 from config import Config
 from models.user import User
@@ -24,17 +25,21 @@ def create():
     username = request.form.get('username')
     password_to_check = request.form.get('password')
 
+    
     # Get user object and associated pw hash
     u = User.get_or_none(User.username == username)
+
     
     if u:
         hashed_password = u.hash
         result=check_password_hash(hashed_password, password_to_check)
         if result:
             print(result)
-            flash('Success!')
+            print('LEEROY')
+            print('JENKINS')
+            # flash('Success!')
             login_user(u)
-            return redirect( url_for('users.show', username=current_user.username))
+            return redirect( url_for('users.user_profile_page'))
         else:
             flash('Password incorrect')
             return render_template('sessions/new.html')
