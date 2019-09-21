@@ -102,19 +102,28 @@ Your proDUCKtive war
     <!-- Page state when game is accepted -->
     <h1>Your proDUCKtivity war</h1>
 
+
+    <!-- Player 1 Habits -->
+
     <!-- Active User Habits -->
+
     <div id="container" class="d-flex justify-content-between">
         <div class="col-5" id="p1-habits">
             <img class="w-100" src="/static/img/game-duck-2.jpg">
             <h3>Your habits</h3>
             {% for i in range(0, length_habit_list)|reverse %}
             <div class="habit">
+                {% if user_more_to_go[i] < 1 %}
+                <p> Congratulations! You don't have to {{user_habits[i].name.lower()}} again this week.</p>
+                {% else %}
                 <p>{{user_habits[i].name}}! {{user_more_to_go[i]}} more to go!</p>
+                {% endif %}
                 <div class="progress">
                     <div class="progress-bar" role="progressbar" aria-valuenow="{{rounded_progress[i]}}"
                         aria-valuemin="0" aria-valuemax="100" style="width: {{rounded_progress[i]}}%">
                     </div>
                 </div>
+                {% if user_more_to_go[i] > 0 %}
                 <form action={{ url_for('log_habits.create')}} method="POST" enctype="multipart/form-data">
                     <input name='image-for-{{user_habits[i].id}}' type="file" accept="image/*" capture="camera"
                         value="Add photo">
@@ -122,6 +131,7 @@ Your proDUCKtive war
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                     <input type="submit" value="Habit done">
                 </form>
+                {% endif %}
 
             </div>
             {% endfor %}
@@ -158,7 +168,6 @@ Your proDUCKtive war
 </div>
 
 
-
 <style>
     #waiting-header {
         margin-bottom: 16vh;
@@ -193,5 +202,6 @@ Your proDUCKtive war
 
     }
 </style>
+
 
 {% endblock %}

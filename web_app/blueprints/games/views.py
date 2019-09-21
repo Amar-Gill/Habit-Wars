@@ -10,10 +10,8 @@ from models.user import User
 from models.game import Game
 from models.habit import Habit
 from models.log_habit import LogHabit
-<<<<<<< HEAD
-=======
+
 from app import async_create_round
->>>>>>> 8c3311b888e38ca56e19351dbfa6f2e5375d2a7a
 
 
 games_blueprint = Blueprint('games',
@@ -113,7 +111,6 @@ def show(username, game_id):
         leftover = habit.frequency - logged_habits
         user_more_to_go.append(leftover)
 
-    print(user_more_to_go)
     rounded_progress = [round(freq, 0) for freq in progress]
 
 
@@ -169,4 +166,56 @@ def index(username):
     # Get all active games
     games = Game.select().where((Game.player_1_id == user.id) | (Game.player_2_id == user.id))
 
+
     return render_template('games/index.html', games=games, username=username)
+
+
+
+@games_blueprint.route('/<username>/<game_id>/show_approve')
+def show_approve(username, game_id):
+    user = User.get_or_none(User.username == username)
+    game = Game.get_or_none(Game.id == game_id)
+
+    habits = Habit.select().where(Habit.game_id == game_id)
+    game_habits = []
+
+    for habit in habits:
+        game_habits.append(habit.id)
+
+    to_approve = LogHabit.select().where((LogHabit.approved == False) & (LogHabit.receiver_id == user.id) & (LogHabit.habit_id in game_habits))
+
+    to_approve_length = len(to_approve)
+    sender_ids = []
+    senders = []
+
+    for log in to_approve:
+        sender_ids.append(log.sender_id)
+    for id in sender_ids:
+        sender = User.get_or_none(User.id == id)
+        senders.append(sender.username)
+    
+    
+
+    return render_template('games/approval.html', to_approve = to_approve,
+                                                    to_approve_length = to_approve_length,
+                                                    username = username,
+                                                    game_id = game_id,
+                                                    senders = senders)
+
+@games_blueprint.route('/<username>/<game_id>/approve', methods=["POST"])
+def approve(username, game_id):
+    user = User.get_or_none(User.username == username)
+    game = Game.get_or_none(Game.id == game_id)
+
+
+    loghabit_id = request.form.get('loghabit-ids')
+
+
+    loghabit = LogHabit.get_or_none(LogHabit.id == loghabit_id)
+    LogHabit.update(approved = True).where(LogHabit.id == loghabit_id).execute()
+
+    return redirect(url_for('games.show', game_id = game_id, username = username ))
+
+
+
+    
