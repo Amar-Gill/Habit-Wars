@@ -25,7 +25,7 @@
             <img class ='dice-placeholder' src='/static/images/dice-images/d-{{roll_array[i]}}.png'>
            
             {% else %}
-            <form class='mx-auto' action={{ url_for('rounds.roll_dice', game_id = game_id, player=player_variable)}} method="POST">
+            <form class='mx-auto' action={{ url_for('rounds.roll_dice', game_id = game_id, player=player_variable, round_id=round_id)}} method="POST">
                 <input value='' type='hidden' name='roll_value'>
                 <input value='' type='hidden' name='roll_index'>
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
@@ -94,7 +94,7 @@
     <div class="row">
         <div class="col">
             <form id='submit-stats-form'
-                action={{ url_for('rounds.submit_stats', game_id = game_id, player=player_variable) }} method="POST">
+                action={{ url_for('rounds.submit_stats', game_id = game_id, round_id=round_id, player=player_variable) }} method="POST">
                 <div class="form-group">
                     <input type='hidden' id='attack-input' name='attack-input'>
                     <input type='hidden' id='hitpoints-input' name='hitpoints-input'>
@@ -108,7 +108,7 @@
             </form>
         </div>
         <div class="col">
-            <form id='submit-initiative-form' action={{ url_for('rounds.battle', game_id = game_id, player=player_variable) }} method="POST">
+            <form id='submit-initiative-form' action={{ url_for('rounds.battle', game_id = game_id, round_id=round_id, player=player_variable) }} method="POST">
                 <div class="form-group">
                     <input type='hidden' id='initiative_input' name='initiative_input'>
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />

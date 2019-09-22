@@ -11,7 +11,6 @@ Active Games
     <div class="card rounded-lg m-2">
         <div class="card-body">
             <h3 class="card-title">{{game.player_1.username}} vs. {{game.player_2.username}}</h3>
-                        <h3 class="card-title">{{game.player_1.username}} vs. {{game.player_2.username}}</h3>
 
             <h5 class="card-subtitle mb-2 text-muted">game id: {{game.id}}</h5>
             <hr>
@@ -29,6 +28,9 @@ Active Games
         <div class="card-footer d-flex flex-row-reverse">
             <form action={{ url_for('games.show', username=username, game_id=game.id)}} method="GET">
                 <input type='submit' class='btn btn-info' value="View Game">
+            </form>
+            <form action={{ url_for('rounds.index', game_id=game.id)}} method="GET">
+                <input type='submit' class='btn btn-info' value="Battle History">
             </form>
         </div>
     </div>

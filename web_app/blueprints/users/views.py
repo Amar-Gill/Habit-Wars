@@ -11,13 +11,13 @@ users_blueprint = Blueprint('users',
                             __name__,
                             template_folder='templates')
 
-@users_blueprint.route("/user_profile")
-def user_profile_page():
-    return render_template('users/user_profile_page.html')
+@users_blueprint.route("/show/<username>")
+def show(username):
+    return render_template('users/show.html')
 
-@users_blueprint.route('/register', methods = ["GET"])
+@users_blueprint.route('/new', methods = ["GET"])
 def new():
-    return render_template('users/register.html')
+    return render_template('users/new.html')
 
 @users_blueprint.route('/create', methods = ["POST"])
 def create():
@@ -32,7 +32,7 @@ def create():
     u.save()
     login_user(u)
 
-    return redirect( url_for('users.user_profile_page'))
+    return redirect( url_for('users.show', username=username))
 
 
 

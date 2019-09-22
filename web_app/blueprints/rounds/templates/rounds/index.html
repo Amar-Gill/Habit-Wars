@@ -1,0 +1,39 @@
+{% extends '_layout.html' %}
+
+
+{% block title %}
+Battle History
+{% endblock %}
+
+{% block content %}
+
+    {% for round in rounds %}
+    <div class="card rounded-lg m-2">
+        <div class="card-body">
+            <h3 class="card-title">Winner: {{round.result.username or 'pending'}}</h3>
+            <h5 class="card-subtitle mb-2 text-muted">Round: {{loop.index0 + 1}}</h5>
+            <h5 class="card-subtitle mb-2 text-muted">Week of: {{round.created_at.date()}}</h5>
+            <h5 class="card-subtitle mb-2 text-muted">Round id: {{round.id}}</h5>
+            <hr>
+            <div class="d-flex flex-row justify-content-between">
+                <span>
+                    <h1>{{round.player_1_stats[0]}}</h1>
+                    <h5 class='text-muted'>{{game.player_1.username}}</h5>
+                </span>
+                <span>
+                    <h1>{{round.player_2_stats[0]}}</h1>
+                    <h5 class='text-muted'>{{game.player_2.username}}</h5>
+                </span>
+            </div>
+        </div>
+        <div class="card-footer d-flex flex-row-reverse">
+            <form action={{ url_for('rounds.show', game_id=game.id, round_id=round.id)}} method="GET">
+                <input type='submit' class='btn btn-info' value="View Round">
+            </form>
+            
+        </div>
+    </div>
+    
+    {% endfor %}
+
+{% endblock %}
