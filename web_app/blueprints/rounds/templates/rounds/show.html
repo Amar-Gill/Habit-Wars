@@ -18,24 +18,32 @@
         </div>
     </div>
     <div class="row">
-        {% for i in range(0, num_dice) %}
-        <div class="col d-flex flex-column justify-content-center dice-box">
-            {% if roll_array[i] != 0 %}
+        {% if num_dice %}
+            {% for i in range(0, num_dice) %}
+            <div class="col d-flex flex-column justify-content-center dice-box">
+                {% if roll_array[i] != 0 %}
+                
+                <img class ='dice-placeholder' src='/static/images/dice-images/d-{{roll_array[i]}}.png'>
             
-            <img class ='dice-placeholder' src='/static/images/dice-images/d-{{roll_array[i]}}.png'>
-           
-            {% else %}
-            <form class='mx-auto' action={{ url_for('rounds.roll_dice', game_id = game_id, player=player_variable, round_id=round_id)}} method="POST">
-                <input value='' type='hidden' name='roll_value'>
-                <input value='' type='hidden' name='roll_index'>
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-                <button type='submit' class='btn btn-info dice-placeholder text-dark'>
-                    ROLL<br>DICE
-                </button>
-            </form>
-            {% endif %}
-        </div>
-        {% endfor %}
+                {% else %}
+                <form class='mx-auto' action={{ url_for('rounds.roll_dice', game_id = game_id, player=player_variable, round_id=round_id)}} method="POST">
+                    <input value='' type='hidden' name='roll_value'>
+                    <input value='' type='hidden' name='roll_index'>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                    <button type='submit' class='btn btn-info dice-placeholder text-dark'>
+                        ROLL<br>DICE
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col d-flex justify-content-around dice-box">
+                <h1>No Dice</h1>
+                
+                <h1>¯\_(ツ)_/¯</h1>
+            </div>
+        {% endif %}
     </div>
     <div class="row stat-row">
         <div class="col-4">ATTACK</div>
@@ -276,9 +284,15 @@
         margin: auto;
     }
 
+    .dice-box h1 {
+        color: white;
+        margin-top: auto;
+        margin-bottom: auto;
+    }
+
 
     .stat-row {
-        color: aquamarine;
+        color: white;
         margin-top: 4px;
         margin-bottom: 4px;
         height: 6vh;
@@ -335,12 +349,12 @@
     }
 
     #battle-label {
-        color: aquamarine;
+        color: white;
         text-align: center;
     }
 
     .info-header {
-        color:aquamarine;
+        color:white;
         height: 7vh;
     }
 
