@@ -39,7 +39,7 @@ def create():
             print('JENKINS')
             # flash('Success!')
             login_user(u)
-            return redirect( url_for('users.user_profile_page'))
+            return redirect( url_for('users.show', username=username))
         else:
             flash('Password incorrect')
             return render_template('sessions/new.html')

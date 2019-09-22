@@ -4,6 +4,7 @@ from werkzeug.utils import secure_filename
 from models.game import Game
 from models.user import User
 from models.habit import Habit
+from models.round import Round
 import peewee as pw
 from config import Config
 from models.user import User
@@ -17,15 +18,15 @@ games_blueprint = Blueprint('games',
                             template_folder='templates')
 
 
-@games_blueprint.route("/new_game")
-def new_game_page():
-    return render_template('games/new_game_page.html')
+@games_blueprint.route("/new")
+def new():
+    return render_template('games/new.html')
 
 
-@games_blueprint.route('create_new_games', methods=['POST', 'GET'])
-def create_new_game():
+@games_blueprint.route('/create', methods=['POST', 'GET'])
+def create():
     
-    player_1 = User.get_or_none(User.username == "user3")
+    player_1 = User.get_or_none(User.username == current_user.username)
     p2_name = request.form["p2_name"]
 
     habit_a_name = request.form.get('habit_1_name')
@@ -80,7 +81,7 @@ def create_new_game():
             new_game.save()
             habit_c.save()
 
-    return redirect(url_for('games.new_game_page'))
+    return redirect(url_for('games.new'))
 
 
 #Dont forget to change game round id!!!!
@@ -88,6 +89,9 @@ def create_new_game():
 def show(username, game_id):
 
     game = Game.get_or_none(Game.id == game_id)
+
+    #int value for latest round_id for the game
+    latest_round = Round.select(pw.fn.MAX(Round.id)).where(Round.game_id == game_id).scalar()
 
     # Active player - could be either player 1 or 2
     user = User.get_or_none(User.username == username)    
@@ -102,7 +106,7 @@ def show(username, game_id):
     user_more_to_go = []
 
     for habit in user_habits:
-        approved_logs = LogHabit.select().where((LogHabit.sender_id == user.id) & (LogHabit.habit_id == habit.id) & (LogHabit.approved == True) & (LogHabit.game_round_id == 2))        
+        approved_logs = LogHabit.select().where((LogHabit.sender_id == user.id) & (LogHabit.habit_id == habit.id) & (LogHabit.approved == True) & (LogHabit.game_round_id == latest_round))        
         logged_habits = len(approved_logs)
         percentage = logged_habits / habit.frequency * 100
         progress.append(percentage)

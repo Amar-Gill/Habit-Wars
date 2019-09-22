@@ -79,9 +79,6 @@ def create(username, game_id):
         async_create_round.delay(game_id)
 
         return redirect(f'/game/{username}/{game_id}')
-        # return redirect(request.url)
-        # return render_template('games/show')
-        # return redirect( url_for('games.index', username=username))
 
     else:
         # destroy game

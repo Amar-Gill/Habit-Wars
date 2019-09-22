@@ -4,13 +4,12 @@
 
 <div class="row no-gutters" style="height: 100vh" >
     <div style="background-color: blue" class="col-12 col-md-6">
-        <h1>User Name Here{{current_user.username}}</h1>
-        <img class="w-100" src="../../../../static/img/No-profile.jpg" alt="User Profile Img">
-
+        <h1>{{current_user.username}}</h1>
+        <img class="w-100" src="/static/img/No-profile.jpg" alt="User Profile Img">
     </div>
 
     <div style="background-color: black; " class="col-12 col-md-6 row justify-content-center">
-        <form action="{{ url_for('games.create_new_game') }}" method="POST">
+        <form action="{{ url_for('games.create') }}" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
             <div class="input-group" >

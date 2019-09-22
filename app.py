@@ -12,10 +12,6 @@ import config
 import os
 
 load_dotenv()
-
-import config
-import os
-
 	
 app = Flask(__name__)
 
@@ -76,6 +72,6 @@ def async_create_round(game_id):
     round = Round(game_id = game_id)
     round.save()
 
-    # start recursive background task to execute on Monday 00:00:00 - which recalls round.create
+    # start recursive background task to execute on Monday 00:00:00 - which recalls async_round_create
     # for development purposes set timedelta = 30s
     async_create_round.apply_async((game_id,), countdown = delta )
