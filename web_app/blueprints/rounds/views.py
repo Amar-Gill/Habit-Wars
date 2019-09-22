@@ -33,7 +33,7 @@ def show(game_id, round_id):
     round_id = round_id  # hardcode for dev purposes
     round = Round.get_by_id(round_id)
 
-    # get round number from round index form
+    # get round number from round index form or hidden inputs in round show
     round_num = request.args['round_num']
 
     # determine if current_user is p1 or p2 and get roll array
@@ -98,6 +98,9 @@ def roll_dice(game_id, player, round_id):
     # get round instance - do we need game_id????
     round = Round.get_by_id(round_id)
 
+    # get round number from round index form or hidden inputs in round show
+    round_num = request.form.get('round_num')
+
     if player == '1':
         round.player_1_rolls[roll_index] = roll_value
         round.save()
@@ -105,7 +108,7 @@ def roll_dice(game_id, player, round_id):
         round.player_2_rolls[roll_index] = roll_value
         round.save()
 
-    return redirect( url_for('rounds.show', game_id = game_id, round_id=round_id))
+    return redirect( url_for('rounds.show', game_id = game_id, round_id=round_id, round_num=round_num))
 
 
 @rounds_blueprint.route('/<round_id>/game_<game_id>/player_<player>/submit_stats', methods=['POST'])
@@ -119,9 +122,9 @@ def submit_stats(game_id, player, round_id):
         int(request.form.get('hitpoints-input')),
         int(request.form.get('luck-input'))
     ]
-    print(type(stats_array))
-    print(type(stats_array[0]))
-    print(stats_array)
+    
+    # get round number from round index form or hidden inputs in round show
+    round_num = request.form.get('round_num')
 
     if player == '1':
         round.player_1_stats = stats_array
@@ -132,7 +135,7 @@ def submit_stats(game_id, player, round_id):
         round.player_2_initiative = -1
         round.save()
 
-    return redirect( url_for('rounds.show', game_id=game_id, round_id=round_id))
+    return redirect( url_for('rounds.show', game_id=game_id, round_id=round_id, round_num=round_num))
 
 
 @rounds_blueprint.route('/<round_id>/game=<game_id>/player=<player>/battle', methods=['POST'])
@@ -142,6 +145,9 @@ def battle(game_id, player, round_id):
     
     # get round instance - do we need game_id????
     round = Round.get_by_id(round_id)
+
+    # get round number from round index form or hidden inputs in round show
+    round_num = request.form.get('round_num')
 
     player_initiative = int(request.form.get('initiative_input'))
 
@@ -247,7 +253,7 @@ def battle(game_id, player, round_id):
                     game.save()
 
     
-    return redirect( url_for('rounds.show', game_id=game_id, round_id=round_id))
+    return redirect( url_for('rounds.show', game_id=game_id, round_id=round_id, round_num=round_num))
 
 
 @rounds_blueprint.route('/index/<game_id>', methods=["GET"])
