@@ -5,12 +5,12 @@
 <div class="container">
     <div class="info-header row">
         <div class="col">
-            Round: 1 <br>
+            Round: {{round_num}} <br>
             Player # {{player_variable}}
         </div>
         <div class="col">
-            Week Ending:<br>
-            DATE
+            Week of:<br>
+            {{round.created_at.date()}}
         </div>
         <div class="col">
             Dice Rolls:

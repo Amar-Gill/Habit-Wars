@@ -20,10 +20,9 @@ rounds_blueprint = Blueprint('rounds',
 @rounds_blueprint.route('/show/<game_id>/<round_id>', methods=['GET'])
 def show(game_id, round_id):
 
-    # hardcode game_id for now
-    game_id = game_id
 
     # get game model object
+    game_id = game_id
     game = Game.get_by_id(game_id)
 
     # empty array for number of dice
@@ -34,8 +33,8 @@ def show(game_id, round_id):
     round_id = round_id  # hardcode for dev purposes
     round = Round.get_by_id(round_id)
 
-    # get current player id - hardcoded for now
-    # current_player = User.get_by_id(current_user.id)
+    # get round number from round index form
+    round_num = request.args['round_num']
 
     # determine if current_user is p1 or p2 and get roll array
     game_player_1_id = game.player_1_id
@@ -77,7 +76,9 @@ def show(game_id, round_id):
             num_dice += 1
 
     return render_template('rounds/show.html',
+                            round=round,
                             round_id = round_id,
+                            round_num=round_num,
                             num_dice=num_dice,
                             dice_array=dice_array,
                             player_variable=player_variable,
