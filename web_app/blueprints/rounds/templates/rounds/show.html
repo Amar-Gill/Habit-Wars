@@ -148,14 +148,28 @@
         </div>
         <!-- SHOW BATTLE HERE =D -->
         {% else %}
-        <div id='battle-label'>
-                <h5>
-                    Game On!
-                </h5>
-        </div>
         <div id="battle-stage">
             <img id="player-1-avatar" src='/static/images/duck-images/duck-3.png'>
             <img id="player-2-avatar" src='/static/images/duck-images/duck-1.png'>
+        </div>
+        <div class='row' id='battle-label-active'>
+            <div class="col mt-3">
+                <div class="progress">
+                    <div class="progress-bar bg-success p1-progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+            <div class="col mt-3">
+                <h5>
+                    Game On!
+                </h5>
+
+            </div>
+            <div class="col mt-3">
+                <div class="progress">
+                    <div class="progress-bar bg-success p2-progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+
+            </div>
         </div>
         {% endif %}
         {% else %}
@@ -195,7 +209,10 @@
     //generate array of 2 items which are the dmg output arrays for each player
     if (result) {
 
-        $("#battle-label h5").html('Game On!')
+        $("#battle-label-active h5").html('Game On!')
+
+        p1Health = {{round.player_1_stats[1]}}
+        p2Health = {{round.player_2_stats[1]}}
 
         if (initiative > opponent_initiative) {
             playerVariable == 1 ? total_dmg = [[...p1_dmg_array], [...p2_dmg_array]] : total_dmg = [[...p2_dmg_array], [...p1_dmg_array]]
@@ -226,7 +243,7 @@
             battleScript.pop()
         }
 
-        console.log(battleScript)
+        console.log([...battleScript])
 
         function animateAttack(dom, player) {
             dom.addClass(`attack-${player}`)
@@ -235,12 +252,29 @@
 
         function attack(script) {
             if (!script.length){
-                $("#battle-label h5").html(`{{winner.username}} wins!`)
+                $("#battle-label-active h5").html(`{{winner.username}} wins!`)
                 return
             }
             const { damage, player } = script[0]
             console.log(`Animate: player ${player} attacked for ${damage}`)
             animateAttack($(`#player-${player}-avatar`), player)
+            if (player == 1) {
+                p2Health -= damage
+                console.log('P2 health: ' + p2Health)
+                //set width of bar
+                let new_width = (p2Health/{{round.player_2_stats[1]}})*100
+                setTimeout( function () {
+                $(".p2-progress-bar").width(`${new_width}%`)
+                }, 1000)
+            } else {
+                p1Health -= damage
+                console.log('P1 health: ' + p1Health)
+                let new_width = (p1Health/{{round.player_1_stats[1]}})*100
+                setTimeout(function() {
+                $(".p1-progress-bar").width(`${new_width}%`)
+
+                }, 1000)
+            }
             script.shift()
             setTimeout(() => { attack(script) }, 2000)
         }
@@ -355,6 +389,15 @@
 </script>
 
 <style>
+
+    .progress {
+        width: 25vw;
+    }
+
+    #battle-label-active h5 {
+        display: inline-block;
+    }
+
     .dice-box {
         height: 12vh;
         margin: 8px;
@@ -407,7 +450,7 @@
 
     #battle-stage img {
 
-        max-width: 20%;
+        max-width: 17.5%;
 
     }
 
@@ -415,12 +458,11 @@
 
         #battle-stage img {
 
-            max-width: 40%;
+            max-width: 35%;
 
         }
 
     }
-
 
     #duck-placeholder {
         max-height: 85%;
@@ -433,6 +475,11 @@
     }
 
     #battle-label {
+        color: white;
+        text-align: center;
+    }
+
+    #battle-label-active {
         color: white;
         text-align: center;
     }

@@ -76,7 +76,7 @@ def create(username, game_id):
         game.save()
 
         # start asynchronus loop for rounds - first call beginning immediately
-        # async_create_round.delay(game_id)
+        async_create_round.delay(game_id)
 
         return redirect(f'/game/{username}/{game_id}')
 
