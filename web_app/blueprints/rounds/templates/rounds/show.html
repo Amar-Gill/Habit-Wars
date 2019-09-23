@@ -148,10 +148,14 @@
         </div>
         <!-- SHOW BATTLE HERE =D -->
         {% else %}
+        <div id='battle-label'>
+                <h5>
+                    Game On!
+                </h5>
+        </div>
         <div id="battle-stage">
             <img id="player-1-avatar" src='/static/images/duck-images/duck-3.png'>
             <img id="player-2-avatar" src='/static/images/duck-images/duck-1.png'>
-
         </div>
         {% endif %}
         {% else %}
@@ -191,6 +195,8 @@
     //generate array of 2 items which are the dmg output arrays for each player
     if (result) {
 
+        $("#battle-label h5").html('Game On!')
+
         if (initiative > opponent_initiative) {
             playerVariable == 1 ? total_dmg = [[...p1_dmg_array], [...p2_dmg_array]] : total_dmg = [[...p2_dmg_array], [...p1_dmg_array]]
             playerIndex = [playerVariable, opponentVariable]
@@ -228,7 +234,10 @@
         }
 
         function attack(script) {
-            if (!script.length) return
+            if (!script.length){
+                $("#battle-label h5").html(`{{winner.username}} wins!`)
+                return
+            }
             const { damage, player } = script[0]
             console.log(`Animate: player ${player} attacked for ${damage}`)
             animateAttack($(`#player-${player}-avatar`), player)
@@ -237,6 +246,7 @@
         }
 
         attack(battleScript)
+
     }
 
 

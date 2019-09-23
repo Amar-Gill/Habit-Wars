@@ -55,6 +55,7 @@ def show(game_id, round_id):
         opponent_initiative = round.player_1_initiative
 
     round_result = round.result
+    winner = User.get_by_id(round_result)
 
     # querydb get habits with user_id==current user AND game_id==game_id
     # current_user_habit_array = Habit.select().where((Habit.user_id == current_user.id) & (Habit.game_id == game_id))
@@ -90,7 +91,8 @@ def show(game_id, round_id):
                             opponent_stats=opponent_stats,
                             player_initiative=player_initiative,
                             opponent_initiative=opponent_initiative,
-                            round_result=round_result)
+                            round_result=round_result,
+                            winner=winner)
 
 
 @rounds_blueprint.route('/<round_id>/game_<game_id>/player_<player>/roll', methods=['POST'])
