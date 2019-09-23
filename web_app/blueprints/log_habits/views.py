@@ -65,5 +65,66 @@ def create():
     return redirect(url_for('games.show', game_id = game_id, username = username ))
 
 
+@log_habits_blueprint.route('/<username>/<game_id>/show_approve')
+def show_approve(username, game_id):
+    user = User.get_or_none(User.username == username)
+    game = Game.get_or_none(Game.id == game_id)
+
+    habits = Habit.select().where(Habit.game_id == game_id)
+    game_habits = []
+
+    for habit in habits:
+        game_habits.append(habit.id)
+
+    to_approve = LogHabit.select().where((LogHabit.approved == False) & (LogHabit.receiver_id == user.id) & (LogHabit.habit_id in game_habits))
+
+    to_approve_length = len(to_approve)
+    sender_ids = []
+    senders = []
+
+    for log in to_approve:
+        sender_ids.append(log.sender_id)
+    for id in sender_ids:
+        sender = User.get_or_none(User.id == id)
+        senders.append(sender.username)
+    
+    
+
+    return render_template('log_habits/approval.html', to_approve = to_approve,
+                                                    to_approve_length = to_approve_length,
+                                                    username = username,
+                                                    game_id = game_id,
+                                                    senders = senders)
+
+@log_habits_blueprint.route('/<username>/<game_id>/approve', methods=["POST"])
+def approve(username, game_id):
+    user = User.get_or_none(User.username == username)
+    game = Game.get_or_none(Game.id == game_id)
+
+
+    loghabit_id = request.form.get('loghabit-ids')
+
+
+    loghabit = LogHabit.get_or_none(LogHabit.id == loghabit_id)
+    LogHabit.update(approved = True).where(LogHabit.id == loghabit_id).execute()
+
+    return redirect(url_for('log_habit.show_approve', game_id = game_id, username = username ))
+
+@log_habits_blueprint.route('/<username>/<game_id>/reject, methods=["POST"]')
+def reject(username, game_id):
+    user = User.get_or_none(User.username == username)
+    game = Game.get_or_none(Game.id == game_id)
+
+    loghabit_id = request.form.get('loghabit-ids')
+    loghabit = LogHabit.get_or_none(LogHabit.id == loghabit_id)
+
+    loghabit.delete().where(loghabit.id == loghabit_id)
+
+    return redirect(url_for('log_habit.show_approve', game_id = game_id, username = username ))
+
+
+
+
+
 
 

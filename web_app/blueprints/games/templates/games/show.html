@@ -16,13 +16,13 @@ Your proDUCKtive war
     <!-- check if user is p1 or p2 -->
     {% if active_user == 2 %}
     <form id='accept-form' action={{ url_for("habits.create", username=username, game_id=game_id)}} method="POST">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
         <div class="card">
             <div class="card-body">
                 <h4 class='card-title'> {{opponent_username}} has challenged you to a Habit War!</h4>
                 <h6 class="card-subtitle text-muted">Accept or decline with the form below.</h6>
                 <hr>
-                
+
                 <!-- <label class='ml-auto'> Select Frequency</label> -->
                 <div class="form-row">
                     <div class="form-group col-7">
@@ -31,7 +31,8 @@ Your proDUCKtive war
                     </div>
                     <div class="form-group col-5">
                         <label for="habit-1-frequency">Weekly Goal</label>
-                        <select form='accept-form' id="habit-1-frequency" name="habit-1-frequency" class="custom-select">
+                        <select form='accept-form' id="habit-1-frequency" name="habit-1-frequency"
+                            class="custom-select">
                             <option value='0' selected disabled>Choose...</option>
                             <option value='1'>1</option>
                             <option value='2'>2</option>
@@ -51,7 +52,8 @@ Your proDUCKtive war
                     </div>
                     <div class="form-group col-5">
                         <label for="habit-2-frequency">Weekly Goal</label>
-                        <select form='accept-form' id="habit-2-frequency" name="habit-2-frequency" class="custom-select">
+                        <select form='accept-form' id="habit-2-frequency" name="habit-2-frequency"
+                            class="custom-select">
                             <option value='0' selected disabled>Choose...</option>
                             <option value='1'>1</option>
                             <option value='2'>2</option>
@@ -71,7 +73,8 @@ Your proDUCKtive war
                     </div>
                     <div class="form-group col-5">
                         <label for="habit-3-frequency">Weekly Goal</label>
-                        <select form='accept-form' id="habit-3-frequency" name="habit-3-frequency" class="custom-select">
+                        <select form='accept-form' id="habit-3-frequency" name="habit-3-frequency"
+                            class="custom-select">
                             <option value='0' selected disabled>Choose...</option>
                             <option value='1'>1</option>
                             <option value='2'>2</option>
@@ -85,8 +88,10 @@ Your proDUCKtive war
                 </div>
             </div>
             <div class="card-footer d-flex flex-row justify-content-around">
-                <input form='accept-form' name='challenge-response' value='Accept' type='submit' class='btn btn-primary'>
-                <input form='accept-form' name='challenge-response' value='Decline' type='submit' class='btn btn-danger'>
+                <input form='accept-form' name='challenge-response' value='Accept' type='submit'
+                    class='btn btn-primary'>
+                <input form='accept-form' name='challenge-response' value='Decline' type='submit'
+                    class='btn btn-danger'>
             </div>
         </div>
     </form>
@@ -101,13 +106,19 @@ Your proDUCKtive war
     {% else %}
 
     <!-- Page state when game is accepted -->
-    <h1>Your proDUCKtivity war</h1>
+    <div class="d-flex justify-content-between">
+        <h1>Your proDUCKtivity war</h1>
 
 
-    <!-- Player 1 Habits -->
+        <!-- Player 1 Habits -->
 
-    <!-- Active User Habits -->
-
+        <!-- Active User Habits -->
+        {% if to_approve_length > 0 %}
+        <a href="{{ url_for('log_habits.show_approve', username = username, game_id = game_id ) }}"><button>You have
+                pending
+                approvals!</button></a>
+        {% endif %}
+    </div>
     <div id="container" class="d-flex justify-content-between">
         <div class="col-5" id="p1-habits">
             <img class="w-100" src="/static/img/game-duck-2.jpg">
@@ -158,10 +169,6 @@ Your proDUCKtive war
             </div>
             {% endfor %}
         </div>
-    </div>
-
-    <div id='game_history'>
-        <h2>Battle history</h2>
     </div>
 
     {% endif %}
