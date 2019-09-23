@@ -55,7 +55,7 @@ def show(game_id, round_id):
         opponent_initiative = round.player_1_initiative
 
     round_result = round.result
-    winner = User.get_by_id(round_result)
+    winner = User.get_or_none(User.id == round_result)
 
     # querydb get habits with user_id==current user AND game_id==game_id
     # current_user_habit_array = Habit.select().where((Habit.user_id == current_user.id) & (Habit.game_id == game_id))
