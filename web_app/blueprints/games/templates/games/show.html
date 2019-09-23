@@ -8,208 +8,218 @@ Your proDUCKtive war
 {% block content %}
 <main>
 
-<div class="container justify-content-center">
+    <div class="container justify-content-center">
 
-    <!-- check if game accepted -->
-    {% if not game_accepted %}
+        <!-- check if game accepted -->
+        {% if not game_accepted %}
 
-    <!-- check if user is p1 or p2 -->
-    {% if active_user == 2 %}
-    <form id='accept-form' action={{ url_for("habits.create", username=username, game_id=game_id)}} method="POST">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-        <div class="card">
-            <div class="card-body">
-                <h4 class='card-title'> {{opponent_username}} has challenged you to a Habit War!</h4>
-                <h6 class="card-subtitle text-muted">Accept or decline with the form below.</h6>
-                <hr>
+        <!-- check if user is p1 or p2 -->
+        {% if active_user == 2 %}
+        <form id='accept-form' action={{ url_for("habits.create", username=username, game_id=game_id)}} method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <div class="card">
+                <div class="card-body">
+                    <h4 class='card-title'> {{opponent_username}} has challenged you to a Habit War!</h4>
+                    <h6 class="card-subtitle text-muted">Accept or decline with the form below.</h6>
+                    <hr>
 
-                <!-- <label class='ml-auto'> Select Frequency</label> -->
-                <div class="form-row">
-                    <div class="form-group col-7">
-                        <label for="habit-1-value">Habit 1</label>
-                        <input id="habit-1-value" name='habit-1-value' class="form-control" type='text'>
+                    <!-- <label class='ml-auto'> Select Frequency</label> -->
+                    <div class="form-row">
+                        <div class="form-group col-7">
+                            <label for="habit-1-value">Habit 1</label>
+                            <input id="habit-1-value" name='habit-1-value' class="form-control" type='text'>
+                        </div>
+                        <div class="form-group col-5">
+                            <label for="habit-1-frequency">Weekly Goal</label>
+                            <select form='accept-form' id="habit-1-frequency" name="habit-1-frequency"
+                                class="custom-select">
+                                <option value='0' selected disabled>Choose...</option>
+                                <option value='1'>1</option>
+                                <option value='2'>2</option>
+                                <option value='3'>3</option>
+                                <option value='4'>4</option>
+                                <option value='5'>5</option>
+                                <option value='6'>6</option>
+                                <option value='7'>7</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="form-group col-5">
-                        <label for="habit-1-frequency">Weekly Goal</label>
-                        <select form='accept-form' id="habit-1-frequency" name="habit-1-frequency"
-                            class="custom-select">
-                            <option value='0' selected disabled>Choose...</option>
-                            <option value='1'>1</option>
-                            <option value='2'>2</option>
-                            <option value='3'>3</option>
-                            <option value='4'>4</option>
-                            <option value='5'>5</option>
-                            <option value='6'>6</option>
-                            <option value='7'>7</option>
-                        </select>
+
+                    <div class="form-row">
+                        <div class="form-group col-7">
+                            <label for="habit-2-value">Habit 2</label>
+                            <input id="habit-2-value" name='habit-2-value' class="form-control" type='text'>
+                        </div>
+                        <div class="form-group col-5">
+                            <label for="habit-2-frequency">Weekly Goal</label>
+                            <select form='accept-form' id="habit-2-frequency" name="habit-2-frequency"
+                                class="custom-select">
+                                <option value='0' selected disabled>Choose...</option>
+                                <option value='1'>1</option>
+                                <option value='2'>2</option>
+                                <option value='3'>3</option>
+                                <option value='4'>4</option>
+                                <option value='5'>5</option>
+                                <option value='6'>6</option>
+                                <option value='7'>7</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-7">
+                            <label for="habit-3-value">Habit 3</label>
+                            <input id="habit-3-value" name='habit-3-value' class="form-control" type='text'>
+                        </div>
+                        <div class="form-group col-5">
+                            <label for="habit-3-frequency">Weekly Goal</label>
+                            <select form='accept-form' id="habit-3-frequency" name="habit-3-frequency"
+                                class="custom-select">
+                                <option value='0' selected disabled>Choose...</option>
+                                <option value='1'>1</option>
+                                <option value='2'>2</option>
+                                <option value='3'>3</option>
+                                <option value='4'>4</option>
+                                <option value='5'>5</option>
+                                <option value='6'>6</option>
+                                <option value='7'>7</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-
-                <div class="form-row">
-                    <div class="form-group col-7">
-                        <label for="habit-2-value">Habit 2</label>
-                        <input id="habit-2-value" name='habit-2-value' class="form-control" type='text'>
-                    </div>
-                    <div class="form-group col-5">
-                        <label for="habit-2-frequency">Weekly Goal</label>
-                        <select form='accept-form' id="habit-2-frequency" name="habit-2-frequency"
-                            class="custom-select">
-                            <option value='0' selected disabled>Choose...</option>
-                            <option value='1'>1</option>
-                            <option value='2'>2</option>
-                            <option value='3'>3</option>
-                            <option value='4'>4</option>
-                            <option value='5'>5</option>
-                            <option value='6'>6</option>
-                            <option value='7'>7</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group col-7">
-                        <label for="habit-3-value">Habit 3</label>
-                        <input id="habit-3-value" name='habit-3-value' class="form-control" type='text'>
-                    </div>
-                    <div class="form-group col-5">
-                        <label for="habit-3-frequency">Weekly Goal</label>
-                        <select form='accept-form' id="habit-3-frequency" name="habit-3-frequency"
-                            class="custom-select">
-                            <option value='0' selected disabled>Choose...</option>
-                            <option value='1'>1</option>
-                            <option value='2'>2</option>
-                            <option value='3'>3</option>
-                            <option value='4'>4</option>
-                            <option value='5'>5</option>
-                            <option value='6'>6</option>
-                            <option value='7'>7</option>
-                        </select>
-                    </div>
+                <div class="card-footer d-flex flex-row justify-content-around">
+                    <input form='accept-form' name='challenge-response' value='Accept' type='submit'
+                        class='btn btn-primary'>
+                    <input form='accept-form' name='challenge-response' value='Decline' type='submit'
+                        class='btn btn-danger'>
                 </div>
             </div>
-            <div class="card-footer d-flex flex-row justify-content-around">
-                <input form='accept-form' name='challenge-response' value='Accept' type='submit'
-                    class='btn btn-primary'>
-                <input form='accept-form' name='challenge-response' value='Decline' type='submit'
-                    class='btn btn-danger'>
-            </div>
+        </form>
+        {% else %}
+        <h1 id='waiting-header'>Waiting for {{opponent_username}} to accept your challenge!</h1>
+        <img id="shuriken" src="/static/img/ninja-shuriken.png" />
+        <div id="attribution-tag">Icons made by <a href="https://www.flaticon.com/authors/freepik"
+                title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"
+                title="Flaticon">www.flaticon.com</a>
         </div>
-    </form>
-    {% else %}
-    <h1 id='waiting-header'>Waiting for {{opponent_username}} to accept your challenge!</h1>
-    <img id="shuriken" src="/static/img/ninja-shuriken.png" />
-    <div id="attribution-tag">Icons made by <a href="https://www.flaticon.com/authors/freepik"
-            title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
-    </div>
-    {% endif %}
-
-    {% else %}
-
-    <!-- Page state when game is accepted -->
-    <div class="d-flex justify-content-between">
-        <h1>Your proDUCKtivity war</h1>
-
-
-        <!-- Player 1 Habits -->
-
-        <!-- Active User Habits -->
-        {% if to_approve_length > 0 %}
-        <a href="{{ url_for('log_habits.show_approve', username = username, game_id = game_id ) }}"><button>You have
-                pending
-                approvals!</button></a>
         {% endif %}
-    </div>
-    <div id="container" class="d-flex justify-content-between">
-        <div class="col-5" id="p1-habits">
-            <img class="w-100" src="/static/img/game-duck-2.jpg">
-            <h3>Your habits</h3>
-            {% for i in range(0, length_habit_list)|reverse %}
-            <div class="habit">
-                {% if user_more_to_go[i] < 1 %}
-                <p> Congratulations! You don't have to {{user_habits[i].name.lower()}} again this week.</p>
-                {% else %}
-                <p>{{user_habits[i].name}}! {{user_more_to_go[i]}} more to go!</p>
-                {% endif %}
-                <div class="progress">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="{{rounded_progress[i]}}"
-                        aria-valuemin="0" aria-valuemax="100" style="width: {{rounded_progress[i]}}%">
-                    </div>
-                </div>
-                {% if user_more_to_go[i] > 0 %}
-                <form action={{ url_for('log_habits.create')}} method="POST" enctype="multipart/form-data">
-                    <input name='image-for-{{user_habits[i].id}}' type="file" accept="image/*" capture="camera"
-                        value="Add photo">
-                    <input name='habit-id' type='hidden' value={{user_habits[i].id}}>
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-                    <input type="submit" value="Habit done">
-                </form>
-                {% endif %}
 
+        {% else %}
+
+        <!-- Page state when game is accepted -->
+        <div class="d-flex justify-content-between" id="header-div">
+            <h1 id="produck-title">Your proDUCKtivity war</h1>
+
+
+            <!-- Player 1 Habits -->
+
+            <!-- Active User Habits -->
+            {% if to_approve_length > 0 %}
+            <a href="{{ url_for('log_habits.show_approve', username = username, game_id = game_id ) }}"><button>You have
+                    pending
+                    approvals!</button></a>
+            {% endif %}
+        </div>
+        <div id="container" class="d-flex justify-content-between">
+            <div class="col-5" id="p1-habits">
+                <img class="w-100 rounded-circle mb-3" src="/static/img/game-duck-2.jpg">
+                <h3>Your habits</h3>
+                {% for i in range(0, length_habit_list)|reverse %}
+                <div class="habit my-1">
+                    {% if user_more_to_go[i] < 1 %}
+                    <p> Congratulations! You don't have to {{user_habits[i].name.lower()}} again this week.</p>
+                    {% else %}
+                    <p class="my-4">{{user_habits[i].name}}! {{user_more_to_go[i]}} more to go!</p>
+                    {% endif %}
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="{{rounded_progress[i]}}"
+                            aria-valuemin="0" aria-valuemax="100" style="width: {{rounded_progress[i]}}%">
+                        </div>
+                    </div>
+                    {% if user_more_to_go[i] > 0 %}
+                    <form action={{ url_for('log_habits.create')}} method="POST" enctype="multipart/form-data">
+                        <input name='image-for-{{user_habits[i].id}}' type="file" accept="image/*" capture="camera"
+                            value="Add photo">
+                        <input name='habit-id' type='hidden' value={{user_habits[i].id}}>
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                        <input type="submit" value="Habit done">
+                    </form>
+                    {% endif %}
+
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
+
+
+
+            <!-- Opponent habits -->
+
+            <div class="col-5" id="p1-habits">
+                <img class="w-100 rounded-circle mb-3" src="/static/img/game-duck-1.jpg">
+                <h3>{{opponent_username}}'s habits</h3>
+                {% for i in range(0, opponent_habit_length)|reverse %}
+                <div class="habit">
+                    <p class="mt-4">{{opponent_habits[i].name}}</p>
+                    <div class="progress">
+                        <div class="progress-bar testbar" role="progressbar"
+                            aria-valuenow="{{rounded_opponent_progress}}" aria-valuemin="0" aria-valuemax="100"
+                            style="width: {{rounded_opponent_progress[i]}}%">
+                            <span class="sr-only">73% Complete</span>
+                        </div>
+                    </div>
+
+                </div>
+                {% endfor %}
+            </div>
         </div>
 
 
+        {% endif %}
 
-        <!-- Opponent habits -->
-
-        <div class="col-5" id="p1-habits">
-            <img class="w-100" src="/static/img/game-duck-1.jpg">
-            <h3>{{opponent_username}}'s habits</h3>
-            {% for i in range(0, opponent_habit_length)|reverse %}
-            <div class="habit">
-                <p>{{opponent_habits[i].name}}</p>
-                <div class="progress">
-                    <div class="progress-bar testbar" role="progressbar" aria-valuenow="{{rounded_opponent_progress}}"
-                        aria-valuemin="0" aria-valuemax="100" style="width: {{rounded_opponent_progress[i]}}%">
-                        <span class="sr-only">73% Complete</span>
-                    </div>
-                </div>
-
-            </div>
-            {% endfor %}
-        </div>
     </div>
 
 
-    {% endif %}
+    <style>
+        #produck-title {
+            color: white;
+        }
 
-</div>
+        #header-div {
+            margin: 30px;
+        }
 
+        #waiting-header {
+            margin-bottom: 16vh;
+        }
 
-<style>
-    #waiting-header {
-        margin-bottom: 16vh;
-    }
+        #shuriken {
+            width: 64vw;
+            margin: auto;
+            display: block;
+            animation-name: spinning;
+            animation-duration: 8s;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+        }
 
-    #shuriken {
-        width: 64vw;
-        margin: auto;
-        display: block;
-        animation-name: spinning;
-        animation-duration: 8s;
-        animation-iteration-count: infinite;
-        animation-timing-function: linear;
-    }
+        #attribution-tag {
+            bottom: 2vh;
+            position: absolute;
+        }
 
-    #attribution-tag {
-        bottom: 2vh;
-        position: absolute;
-    }
-
-    /* #accept-form {
+        /* #accept-form {
     display: flex;
     justify-content: space-around;
 } */
 
-    @keyframes spinning {
+        @keyframes spinning {
 
-        100% {
-            transform: rotate(360deg);
+            100% {
+                transform: rotate(360deg);
+            }
+
         }
-
-    }
-</style>
+    </style>
 
 </main>
 {% endblock %}
