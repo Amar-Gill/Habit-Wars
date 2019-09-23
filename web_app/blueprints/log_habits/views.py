@@ -104,6 +104,14 @@ def approve(username, game_id):
     user = User.get_or_none(User.username == username)
     game = Game.get_or_none(Game.id == game_id)
 
+    habits = Habit.select().where(Habit.game_id == game_id)
+    game_habits = []
+
+    for habit in habits:
+        game_habits.append(habit.id)
+
+    to_approve = LogHabit.select().where((LogHabit.approved == False) & (LogHabit.receiver_id == user.id) & (LogHabit.habit_id in game_habits))
+
 
     loghabit_id = request.form.get('loghabit-ids')
 
@@ -111,17 +119,34 @@ def approve(username, game_id):
     loghabit = LogHabit.get_or_none(LogHabit.id == loghabit_id)
     LogHabit.update(approved = True).where(LogHabit.id == loghabit_id).execute()
 
+    if len(to_approve) < 1:
+        return redirect(url_for('games.show', game_id = game_id, username = username))
+
     return redirect(url_for('log_habits.show_approve', game_id = game_id, username = username ))
 
-@log_habits_blueprint.route('/<username>/<game_id>/reject, methods=["POST"]')
+@log_habits_blueprint.route('/<username>/<game_id>/reject', methods=["POST"])
 def reject(username, game_id):
     user = User.get_or_none(User.username == username)
     game = Game.get_or_none(Game.id == game_id)
 
-    loghabit_id = request.form.get('loghabit-ids')
-    loghabit = LogHabit.get_or_none(LogHabit.id == loghabit_id)
+    habits = Habit.select().where(Habit.game_id == game_id)
+    game_habits = []
 
-    loghabit.delete().where(loghabit.id == loghabit_id)
+    for habit in habits:
+        game_habits.append(habit.id)
+
+    to_approve = LogHabit.select().where((LogHabit.approved == False) & (LogHabit.receiver_id == user.id) & (LogHabit.habit_id in game_habits))
+
+
+    loghabit_id = request.form.get('loghabit-ids')
+    print(loghabit_id)
+    loghabit = LogHabit.get_or_none(LogHabit.id == loghabit_id)
+    delete_log = LogHabit.delete().where(LogHabit.id == loghabit_id)
+    delete_log.execute()
+
+
+    if len(to_approve) < 1:
+        return redirect(url_for('games.show', game_id = game_id, username = username))
 
     return redirect(url_for('log_habits.show_approve', game_id = game_id, username = username ))
 
