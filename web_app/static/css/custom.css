@@ -6,3 +6,14 @@ main {
     height: 93vh;
     overflow-y: scroll;
 }
+
+
+.attack {
+    animation: animate-attack 2s linear;
+}
+
+@keyframes animate-attack {
+    0% {background: red;}
+    50% {background: pink;}
+    100% {background: red;}
+}

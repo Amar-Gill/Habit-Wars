@@ -175,6 +175,16 @@ def battle(game_id, player, round_id):
         else:
             first_attack = 2
 
+        # based on first attacker, increment initiative by 1
+        # for the case where initiatives are equal
+        # in order to correctly calculate battlescript on client side
+        if first_attack == 1:
+            round.player_1_initiative += 1
+            round.save()
+        elif first_attack == 2:
+            round.player_2_initiative += 1
+            round.save()
+
         p1_attack = round.player_1_stats[0]
         p1_hp = round.player_1_stats[1]
         p1_luck = round.player_1_stats[2]
@@ -197,7 +207,7 @@ def battle(game_id, player, round_id):
 
                 # check if p2 alive
                 p2_hp = p2_hp - p1_damage
-                if p2_hp < 0:
+                if p2_hp <= 0:
                     round.result = User.get_by_id(game.player_1_id)
                     round.save()
                     game.player_1_score +=1
@@ -214,7 +224,7 @@ def battle(game_id, player, round_id):
 
                 # check if p1 alive
                 p1_hp = p1_hp - p2_damage
-                if p1_hp < 0:
+                if p1_hp <= 0:
                     round.result = User.get_by_id(game.player_2_id)
                     round.save()
                     game.player_2_score += 1
@@ -230,7 +240,7 @@ def battle(game_id, player, round_id):
 
                 # check if p1 alive
                 p1_hp = p1_hp - p2_damage
-                if p1_hp < 0:
+                if p1_hp <= 0:
                     round.result = User.get_by_id(game.player_2_id)
                     round.save()
                     game.player_2_score += 1
@@ -246,7 +256,7 @@ def battle(game_id, player, round_id):
 
                 # check if p2 alive
                 p2_hp = p2_hp - p1_damage
-                if p2_hp < 0:
+                if p2_hp <= 0:
                     round.result = User.get_by_id(game.player_1_id)
                     round.save()
                     game.player_1_score += 1

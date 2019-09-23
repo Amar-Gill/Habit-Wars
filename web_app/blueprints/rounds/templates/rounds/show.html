@@ -110,7 +110,7 @@
                     <input type='hidden' id='luck-input' name='luck-input'>
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                     <input type='hidden' name='round_num' value="{{ round_num}}" />
-                    <button id='submit-stats-btn' class="btn btn-info text-dark game-btn">
+                    <button id='submit-stats-btn' class="btn btn-info text-light game-btn">
                         SUBMIT POWER UPS
                     </button>
 
@@ -123,7 +123,7 @@
                     <input type='hidden' id='initiative_input' name='initiative_input'>
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
                     <input type='hidden' name='round_num' value="{{ round_num}}" />
-                    <button id='battle-btn' class="btn btn-warning text-dark game-btn">
+                    <button id='battle-btn' class="btn btn-warning text-light game-btn">
                         ROLL INITIATIVE AND BATTLE
                     </button>
 
@@ -141,10 +141,11 @@
                         Waiting for opponent...
                     </h5>
                 </div>
+                <!-- SHOW BATTLE HERE =D -->
                 {% else %}
                 <div id="battle-stage">
-                    <img src='/static/images/duck-images/duck-3.png'>
-                    <img src='/static/images/duck-images/duck-1.png'>
+                    <img id="player-1-avatar" src='/static/images/duck-images/duck-3.png'>
+                    <img id="player-2-avatar" src='/static/images/duck-images/duck-1.png'>
                     
                 </div>
                 {% endif %}
@@ -165,6 +166,80 @@
     const diceStatus = [...{{ dice_array }}]
 
     const initiative = {{ player_initiative }}
+
+    const opponent_initiative = {{ opponent_initiative }}
+
+    const playerVariable = {{ player_variable }}
+
+    playerVariable == 1? opponentVariable = 2 : opponentVariable = 1
+
+    const p1_dmg_array = {{ round.player_1_dmg_array }}
+    const p2_dmg_array = {{ round.player_2_dmg_array }}
+
+    let total_dmg = []
+    let battleScript = []
+    let playerIndex = []
+
+    //calculating the battle script for animations
+    //generate array of 2 items which are the dmg output arrays for each player
+    if (initiative > opponent_initiative) {
+        playerVariable == 1 ? total_dmg = [ [...p1_dmg_array], [...p2_dmg_array]] : total_dmg = [ [...p2_dmg_array], [...p1_dmg_array]]
+        playerIndex = [playerVariable, opponentVariable]
+    }
+    else {
+        playerVariable == 1 ? total_dmg = [ [...p2_dmg_array], [...p1_dmg_array]] : total_dmg = [ [...p1_dmg_array], [...p2_dmg_array]]
+        playerIndex = [opponentVariable, playerVariable]
+    }
+
+    //calculate n which is max length of either dmg array
+    const L = Math.max(p1_dmg_array.length, p2_dmg_array.length)
+
+    let n = 0
+    while (n < L) {
+        total_dmg.forEach( (item, index) => {
+            let x = total_dmg[index][n]
+            let y = {
+                'damage': x,
+                'player': playerIndex[index]
+                }
+            battleScript.push(y)
+        })
+        n++
+    }
+
+    if (isNaN(battleScript[battleScript.length - 1].damage)) {
+        battleScript.pop()
+    }
+
+    console.log(battleScript)
+
+    function animateAttack(dom) {
+        dom.addClass('attack')
+        setTimeout(function () {dom.removeClass('attack')}, 2000)
+    }
+
+    function attack(script) {
+        if (!script.length) return
+        const {damage, player} = script[0]
+        console.log(`Animate: player ${player} attacked for ${damage}`)
+        animateAttack($(`#player-${player}-avatar`))
+        script.shift()
+        setTimeout(() => {attack(script)}, 2000)
+    }
+
+    attack(battleScript)
+
+
+    // // loop through battleScript
+    // battleScript.forEach( (item, index) => {
+    //     if (playerTurn == item.player) {
+    //         console.log(`Player ${playerVariable} hit for ` + item.damage)
+    //         attack($(`#player-${playerVariable}-avatar`))
+    //     } else {
+    //         console.log(`Player ${opponentVariable} hit for ` + item.damage)
+    //         attack($(`#player-${opponentVariable}-avatar`))
+    //     }
+    // })
 
     const result = {{ round_result or 'null'}}
 
@@ -339,7 +414,6 @@
 
     }
 
-    
 
     #duck-placeholder {
         max-height: 85%;
