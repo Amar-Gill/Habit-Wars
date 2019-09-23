@@ -1,4 +1,6 @@
 
+from dotenv import load_dotenv
+load_dotenv()
 from flask import Flask, redirect, url_for, render_template, sessions
 from models.base_model import db
 from flask_wtf.csrf import CSRFProtect
@@ -7,11 +9,9 @@ from models.user import User
 from flask_celery import make_celery
 from models.round import Round
 from datetime import datetime, timedelta
-from dotenv import load_dotenv
 import config
 import os
 
-load_dotenv()
 	
 app = Flask(__name__)
 

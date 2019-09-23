@@ -18,11 +18,19 @@ Battle History
             <hr>
             <div class="d-flex flex-row justify-content-between">
                 <span>
-                    <h1>{{round.player_1_stats[0]}}</h1>
+                    {% if round.player_1_initiative > 0 %}
+                    <h4>Ready for Battle</h4>
+                    {% else %}
+                    <h4>Standing By</h4>
+                    {% endif %}
                     <h5 class='text-muted'>{{game.player_1.username}}</h5>
                 </span>
                 <span>
-                    <h1>{{round.player_2_stats[0]}}</h1>
+                        {% if round.player_2_initiative > 0 %}
+                        <h4>Ready for Battle</h4>
+                        {% else %}
+                        <h4>Standing By</h4>
+                        {% endif %}
                     <h5 class='text-muted'>{{game.player_2.username}}</h5>
                 </span>
             </div>
