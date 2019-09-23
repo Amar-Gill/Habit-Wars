@@ -7,6 +7,7 @@ from config import Config
 from models.user import User
 from models.game import Game
 from models.habit import Habit
+from models.round import Round
 from models.log_habit import LogHabit
 
 
@@ -19,6 +20,7 @@ log_habits_blueprint = Blueprint('log_habits',
 
 @log_habits_blueprint.route('/create' , methods=["POST"])
 def create():
+
     #Getting habit_id from the hidden form
     habit_id = request.form.get('habit-id')
     current_habit = Habit.get_or_none(Habit.id == habit_id)
@@ -51,6 +53,7 @@ def create():
     #Change hardcoded game round id
 
                 
+    latest_round = Round.select(pw.fn.MAX(Round.id)).where(Round.game_id == game_id).scalar()
 
 
     new_habit_logged = LogHabit(habit_id = habit_id,
@@ -58,7 +61,7 @@ def create():
                                 receiver_id = receiver_id,
                                 approved = False,
                                 image_path = str(output),
-                                game_round_id = 2)
+                                game_round_id = latest_round)
     
     new_habit_logged.save()
 
@@ -108,7 +111,7 @@ def approve(username, game_id):
     loghabit = LogHabit.get_or_none(LogHabit.id == loghabit_id)
     LogHabit.update(approved = True).where(LogHabit.id == loghabit_id).execute()
 
-    return redirect(url_for('log_habit.show_approve', game_id = game_id, username = username ))
+    return redirect(url_for('log_habits.show_approve', game_id = game_id, username = username ))
 
 @log_habits_blueprint.route('/<username>/<game_id>/reject, methods=["POST"]')
 def reject(username, game_id):
@@ -120,7 +123,7 @@ def reject(username, game_id):
 
     loghabit.delete().where(loghabit.id == loghabit_id)
 
-    return redirect(url_for('log_habit.show_approve', game_id = game_id, username = username ))
+    return redirect(url_for('log_habits.show_approve', game_id = game_id, username = username ))
 
 
 

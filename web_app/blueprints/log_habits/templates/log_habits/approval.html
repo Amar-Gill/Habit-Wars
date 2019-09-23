@@ -19,12 +19,12 @@ Approval page
             <img width='30%' src="{{to_approve[i].image_path}}">
         </div>
         <div class="card-footer d-flex flex-row-reverse">
-            <form action="{{ url_for('games.approve', username = username, game_id = game_id)}}" enctype="multipart/form-data" method="POST">
+            <form action="{{ url_for('log_habits.approve', username = username, game_id = game_id)}}" enctype="multipart/form-data" method="POST">
                 <input type='hidden' name="loghabit-ids" value="{{ to_approve[i].id }}">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <input type='submit' class='btn btn-info' value="Accept">
-                <a href="{{ url_for('games.show', username = username, game_id = game_id) }}"><button class='btn btn-info' >Reject</button></a>
             </form>
+            <a href="{{ url_for('games.show', username = username, game_id = game_id) }}"><button class='btn btn-info' >Reject</button></a>
         </div>
     </div>
     {% endfor %}
