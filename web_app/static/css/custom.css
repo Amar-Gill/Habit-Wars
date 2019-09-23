@@ -6,3 +6,61 @@ main {
     height: 93vh;
     overflow-y: scroll;
 }
+
+
+.attack-1 {
+    animation: animate-attack-1 2s;
+}
+
+@keyframes animate-attack-1 {
+    0% {
+        transform: translate3d(0,0,0);
+    }
+    
+    50% {
+        transform: translate3d(30vw,0,0) rotate(30deg)
+    }
+    
+    
+    57% {
+        transform: translate3d(42vw,0,0) rotate(30deg)
+    }
+
+    65% {
+        transform: translate3d(30vw,0,0) rotate(30deg)
+    }
+
+    
+    100% {
+        transform: translate3d(0,0,0) rotate(0deg);
+        
+    }
+}
+
+.attack-2 {
+    animation: animate-attack-2 2s;
+}
+
+@keyframes animate-attack-2 {
+    0% {
+        transform: translate3d(0,0,0);
+    }
+
+    50% {
+        transform: translate3d(-30vw,0,0) rotate(-30deg)
+    }
+    
+    
+    57% {
+        transform: translate3d(-42vw,0,0) rotate(-30deg)
+    }
+
+    65% {
+        transform: translate3d(-30vw,0,0) rotate(-30deg)
+    }
+
+    
+    100% {
+        transform: translate3d(0,0,0) rotate(0deg);
+    }
+}
