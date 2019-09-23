@@ -43,12 +43,14 @@ def show(game_id, round_id):
         player_variable = 1
         roll_array = round.player_1_rolls
         player_stats = round.player_1_stats
+        opponent_stats = round.player_2_stats
         player_initiative = round.player_1_initiative
         opponent_initiative = round.player_2_initiative
     else:
         player_variable = 2
         roll_array = round.player_2_rolls
         player_stats = round.player_2_stats
+        opponent_stats = round.player_1_stats
         player_initiative = round.player_2_initiative
         opponent_initiative = round.player_1_initiative
 
@@ -85,6 +87,7 @@ def show(game_id, round_id):
                             game_id=game_id,
                             roll_array=roll_array,
                             player_stats=player_stats,
+                            opponent_stats=opponent_stats,
                             player_initiative=player_initiative,
                             opponent_initiative=opponent_initiative,
                             round_result=round_result)

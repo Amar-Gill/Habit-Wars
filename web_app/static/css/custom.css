@@ -8,12 +8,46 @@ main {
 }
 
 
-.attack {
-    animation: animate-attack 2s linear;
+.attack-1 {
+    animation: animate-attack-1 2s linear;
 }
 
-@keyframes animate-attack {
-    0% {background: red;}
-    50% {background: pink;}
-    100% {background: red;}
+@keyframes animate-attack-1 {
+    0% {
+        transform: translate3d(0,0,0);
+    }
+
+    
+    
+    50% {
+        transform: translate3d(75%,0,0) rotate(30deg)
+    }
+
+    
+    100% {
+        transform: translate3d(0,0,0) rotate(0deg);
+        
+    }
+}
+
+.attack-2 {
+    animation: animate-attack-2 2s linear;
+}
+
+@keyframes animate-attack-2 {
+    0% {
+        transform: translate3d(0,0,0);
+    }
+
+    
+    
+    50% {
+        transform: translate3d(-75%,0,0) rotate (-30deg);
+    }
+
+    
+    
+    100% {
+        transform: translate3d(0,0,0) rotate(0deg);
+    }
 }

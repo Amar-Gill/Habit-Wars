@@ -19,31 +19,33 @@
     </div>
     <div class="row">
         {% if num_dice %}
-            {% for i in range(0, num_dice) %}
-            <div class="col d-flex flex-column justify-content-center dice-box">
-                {% if roll_array[i] != 0 %}
-                
-                <img class ='dice-placeholder' src='/static/images/dice-images/d-{{roll_array[i]}}.png'>
-            
-                {% else %}
-                <form class='mx-auto' action={{ url_for('rounds.roll_dice', game_id = game_id, player=player_variable, round_id=round_id)}} method="POST">
-                    <input value='' type='hidden' name='roll_value'>
-                    <input value='' type='hidden' name='roll_index'>
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-                    <input type='hidden' name='round_num' value="{{ round_num}}" />
-                    <button type='submit' class='btn btn-info dice-placeholder text-dark'>
-                        ROLL<br>DICE
-                    </button>
-                </form>
-                {% endif %}
-            </div>
-            {% endfor %}
+        {% for i in range(0, num_dice) %}
+        <div class="col d-flex flex-column justify-content-center dice-box">
+            {% if roll_array[i] != 0 %}
+
+            <img class='dice-placeholder' src='/static/images/dice-images/d-{{roll_array[i]}}.png'>
+
+            {% else %}
+            <form class='mx-auto'
+                action={{ url_for('rounds.roll_dice', game_id = game_id, player=player_variable, round_id=round_id)}}
+                method="POST">
+                <input value='' type='hidden' name='roll_value'>
+                <input value='' type='hidden' name='roll_index'>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                <input type='hidden' name='round_num' value="{{ round_num}}" />
+                <button type='submit' class='btn btn-info dice-placeholder text-dark'>
+                    ROLL<br>DICE
+                </button>
+            </form>
+            {% endif %}
+        </div>
+        {% endfor %}
         {% else %}
-            <div class="col d-flex justify-content-around dice-box">
-                <h1>No Dice</h1>
-                
-                <h1>¯\_(ツ)_/¯</h1>
-            </div>
+        <div class="col d-flex justify-content-around dice-box">
+            <h1>No Dice</h1>
+
+            <h1>¯\_(ツ)_/¯</h1>
+        </div>
         {% endif %}
     </div>
     <div class="row stat-row">
@@ -103,7 +105,8 @@
     <div class="row">
         <div class="col">
             <form id='submit-stats-form'
-                action={{ url_for('rounds.submit_stats', game_id = game_id, round_id=round_id, player=player_variable) }} method="POST">
+                action={{ url_for('rounds.submit_stats', game_id = game_id, round_id=round_id, player=player_variable) }}
+                method="POST">
                 <div class="form-group">
                     <input type='hidden' id='attack-input' name='attack-input'>
                     <input type='hidden' id='hitpoints-input' name='hitpoints-input'>
@@ -118,7 +121,9 @@
             </form>
         </div>
         <div class="col">
-            <form id='submit-initiative-form' action={{ url_for('rounds.battle', game_id = game_id, round_id=round_id, player=player_variable) }} method="POST">
+            <form id='submit-initiative-form'
+                action={{ url_for('rounds.battle', game_id = game_id, round_id=round_id, player=player_variable) }}
+                method="POST">
                 <div class="form-group">
                     <input type='hidden' id='initiative_input' name='initiative_input'>
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
@@ -131,38 +136,40 @@
             </form>
         </div>
     </div>
-    
-        <div class="battle-box">
-            {% if player_initiative > 0 %}
-                {% if opponent_initiative <= 0 %}
-                <img id='duck-placeholder' src='/static/images/duck-images/duck-placeholder.png'/>
-                <div id='battle-label'>
-                    <h5>
-                        Waiting for opponent...
-                    </h5>
-                </div>
-                <!-- SHOW BATTLE HERE =D -->
-                {% else %}
-                <div id="battle-stage">
-                    <img id="player-1-avatar" src='/static/images/duck-images/duck-3.png'>
-                    <img id="player-2-avatar" src='/static/images/duck-images/duck-1.png'>
-                    
-                </div>
-                {% endif %}
-            {% else %}
-                <img id='duck-placeholder' src='/static/images/duck-images/duck-placeholder.png'/>
-                <div id='battle-label'>
-                    <h5>
-                        Apply power ups and roll initiative<br>to begin battle!
-                    </h5>
-                </div>
-            {% endif %}
+
+    <div class="battle-box">
+        {% if player_initiative > 0 %}
+        {% if opponent_initiative <= 0 %}
+        <img id='duck-placeholder' src='/static/images/duck-images/duck-placeholder.png' />
+        <div id='battle-label'>
+            <h5>
+                Waiting for opponent...
+            </h5>
+        </div>
+        <!-- SHOW BATTLE HERE =D -->
+        {% else %}
+        <div id="battle-stage">
+            <img id="player-1-avatar" src='/static/images/duck-images/duck-3.png'>
+            <img id="player-2-avatar" src='/static/images/duck-images/duck-1.png'>
 
         </div>
-        
+        {% endif %}
+        {% else %}
+        <img id='duck-placeholder' src='/static/images/duck-images/duck-placeholder.png' />
+        <div id='battle-label'>
+            <h5>
+                Apply power ups and roll initiative<br>to begin battle!
+            </h5>
+        </div>
+        {% endif %}
+
+    </div>
+
 </div>
 
 <script>
+    const result = {{ round_result or 'null'}}
+
     const diceStatus = [...{{ dice_array }}]
 
     const initiative = {{ player_initiative }}
@@ -171,7 +178,7 @@
 
     const playerVariable = {{ player_variable }}
 
-    playerVariable == 1? opponentVariable = 2 : opponentVariable = 1
+    playerVariable == 1 ? opponentVariable = 2 : opponentVariable = 1
 
     const p1_dmg_array = {{ round.player_1_dmg_array }}
     const p2_dmg_array = {{ round.player_2_dmg_array }}
@@ -182,66 +189,56 @@
 
     //calculating the battle script for animations
     //generate array of 2 items which are the dmg output arrays for each player
-    if (initiative > opponent_initiative) {
-        playerVariable == 1 ? total_dmg = [ [...p1_dmg_array], [...p2_dmg_array]] : total_dmg = [ [...p2_dmg_array], [...p1_dmg_array]]
-        playerIndex = [playerVariable, opponentVariable]
-    }
-    else {
-        playerVariable == 1 ? total_dmg = [ [...p2_dmg_array], [...p1_dmg_array]] : total_dmg = [ [...p1_dmg_array], [...p2_dmg_array]]
-        playerIndex = [opponentVariable, playerVariable]
-    }
+    if (result) {
 
-    //calculate n which is max length of either dmg array
-    const L = Math.max(p1_dmg_array.length, p2_dmg_array.length)
+        if (initiative > opponent_initiative) {
+            playerVariable == 1 ? total_dmg = [[...p1_dmg_array], [...p2_dmg_array]] : total_dmg = [[...p2_dmg_array], [...p1_dmg_array]]
+            playerIndex = [playerVariable, opponentVariable]
+        }
+        else {
+            playerVariable == 1 ? total_dmg = [[...p2_dmg_array], [...p1_dmg_array]] : total_dmg = [[...p1_dmg_array], [...p2_dmg_array]]
+            playerIndex = [opponentVariable, playerVariable]
+        }
 
-    let n = 0
-    while (n < L) {
-        total_dmg.forEach( (item, index) => {
-            let x = total_dmg[index][n]
-            let y = {
-                'damage': x,
-                'player': playerIndex[index]
+        //calculate n which is max length of either dmg array
+        const L = Math.max(p1_dmg_array.length, p2_dmg_array.length)
+
+        let n = 0
+        while (n < L) {
+            total_dmg.forEach((item, index) => {
+                let x = total_dmg[index][n]
+                let y = {
+                    'damage': x,
+                    'player': playerIndex[index]
                 }
-            battleScript.push(y)
-        })
-        n++
+                battleScript.push(y)
+            })
+            n++
+        }
+
+        if (isNaN(battleScript[battleScript.length - 1].damage)) {
+            battleScript.pop()
+        }
+
+        console.log(battleScript)
+
+        function animateAttack(dom, player) {
+            dom.addClass(`attack-${player}`)
+            setTimeout(function () { dom.removeClass(`attack-${player}`) }, 2000)
+        }
+
+        function attack(script) {
+            if (!script.length) return
+            const { damage, player } = script[0]
+            console.log(`Animate: player ${player} attacked for ${damage}`)
+            animateAttack($(`#player-${player}-avatar`), player)
+            script.shift()
+            setTimeout(() => { attack(script) }, 2000)
+        }
+
+        attack(battleScript)
     }
 
-    if (isNaN(battleScript[battleScript.length - 1].damage)) {
-        battleScript.pop()
-    }
-
-    console.log(battleScript)
-
-    function animateAttack(dom) {
-        dom.addClass('attack')
-        setTimeout(function () {dom.removeClass('attack')}, 2000)
-    }
-
-    function attack(script) {
-        if (!script.length) return
-        const {damage, player} = script[0]
-        console.log(`Animate: player ${player} attacked for ${damage}`)
-        animateAttack($(`#player-${player}-avatar`))
-        script.shift()
-        setTimeout(() => {attack(script)}, 2000)
-    }
-
-    attack(battleScript)
-
-
-    // // loop through battleScript
-    // battleScript.forEach( (item, index) => {
-    //     if (playerTurn == item.player) {
-    //         console.log(`Player ${playerVariable} hit for ` + item.damage)
-    //         attack($(`#player-${playerVariable}-avatar`))
-    //     } else {
-    //         console.log(`Player ${opponentVariable} hit for ` + item.damage)
-    //         attack($(`#player-${opponentVariable}-avatar`))
-    //     }
-    // })
-
-    const result = {{ round_result or 'null'}}
 
     if (initiative >= 0) {
         $('#battle-btn').prop('disabled', true)
@@ -358,7 +355,7 @@
     .dice-box img {
         max-height: 100%;
         max-width: 100%;
-        height:auto;
+        height: auto;
         margin: auto;
     }
 
@@ -399,17 +396,17 @@
     }
 
     #battle-stage img {
-            
-            max-width: 20%;
-            
+
+        max-width: 20%;
+
     }
 
     @media only screen and (max-width: 600px) {
 
         #battle-stage img {
-            
+
             max-width: 40%;
-            
+
         }
 
     }
@@ -418,7 +415,7 @@
     #duck-placeholder {
         max-height: 85%;
         max-width: 85%;
-        height:auto;
+        height: auto;
         margin: auto;
         padding-top: 8vh;
         padding-bottom: 4vh;
@@ -431,10 +428,9 @@
     }
 
     .info-header {
-        color:white;
+        color: white;
         height: 7vh;
     }
-
 </style>
 
 {% endblock %}
