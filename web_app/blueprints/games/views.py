@@ -42,10 +42,10 @@ def create():
         return redirect(url_for('games.new_game_page'))
     else:
         player_2 = User.get_or_none(User.username == p2_name)
-        new_game = Game(player_1 = player_1, player_2 = player_2)
+        new_game = Game(player_1_id = player_1.id, player_2_id = player_2.id)
 
     if (not habit_a_name )and (not habit_b_name) and (not habit_c_name):
-        flash('Enter minimum one habit!')
+        flash('Enter at least one habit!')
         return redirect(url_for('games.new_game_page'))
 
     if habit_a_name:
@@ -127,10 +127,10 @@ def show(username, game_id):
         active_user = 2
         opponent = User.get_or_none(User.id == game.player_1_id)
 
-
     opponent_username = opponent.username
     opponent_habits = Habit.select().where((Habit.game_id == game_id) & (Habit.user_id == opponent.id))
     opponent_habit_length = len(opponent_habits)
+    print(opponent_habit_length)
 
     # check if game has been accepted by player_2 or not
     game_accepted = game.accepted
@@ -140,12 +140,14 @@ def show(username, game_id):
     opponent_progress = []
 
     for habit in opponent_habits:
-        approved_logs = LogHabit.select().where((LogHabit.sender_id == opponent.id) & (LogHabit.habit_id == habit.id) & (LogHabit.approved == True) & (LogHabit.game_round_id == 2))        
+        approved_logs = LogHabit.select().where((LogHabit.sender_id == opponent.id) & (LogHabit.habit_id == habit.id) & (LogHabit.approved == True) & (LogHabit.game_round_id == latest_round))        
         logged_habits = len(approved_logs)
         percentage = logged_habits / habit.frequency * 100
         opponent_progress.append(percentage)
     
+    print(opponent_progress)
     rounded_opponent_progress = [round(freq, 0) for freq in opponent_progress]
+
 
     habits = Habit.select().where(Habit.game_id == game_id)
     game_habits = []
