@@ -93,6 +93,7 @@ def show(username, game_id):
 
     #int value for latest round_id for the game
     latest_round = Round.select(pw.fn.MAX(Round.id)).where(Round.game_id == game_id).scalar()
+    current_round_object = Round.select().where(Round.id == latest_round).get()
 
     # Active player - could be either player 1 or 2
     user = User.get_or_none(User.username == username)    
@@ -170,7 +171,8 @@ def show(username, game_id):
                             game_id = game.id,
                             game_accepted = game_accepted,
                             active_user=active_user,
-                            to_approve_length = to_approve_length)
+                            to_approve_length = to_approve_length,
+                            current_round_object=current_round_object)
 
 
 @games_blueprint.route('/<username>/index')
