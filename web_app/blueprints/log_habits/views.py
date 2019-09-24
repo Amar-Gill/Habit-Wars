@@ -61,7 +61,7 @@ def create():
     
     new_habit_logged.save()
 
-    flash('Habit submitted. Waiting for your opponent\'s approval. Keep up the good work!')
+    flash('Habit submitted. Waiting for your opponent\'s approval. Keep up the good work!', 'success')
 
     return redirect(url_for('games.show', game_id = game_id, username = username ))
 
@@ -117,7 +117,7 @@ def approve(username, game_id):
     loghabit = LogHabit.get_or_none(LogHabit.id == loghabit_id)
     LogHabit.update(approved = True).where(LogHabit.id == loghabit_id).execute()
 
-    flash('Habit approved.')
+    flash('Habit approved.', 'success')
 
     if len(to_approve) < 1:
         return redirect(url_for('games.show', game_id = game_id, username = username))
@@ -145,7 +145,7 @@ def reject(username, game_id):
     delete_log = LogHabit.delete().where(LogHabit.id == loghabit_id)
     delete_log.execute()
 
-    flash('Habit rejected.')
+    flash('Habit rejected.', 'success')
 
     if len(to_approve) < 1:
         return redirect(url_for('games.show', game_id = game_id, username = username))
