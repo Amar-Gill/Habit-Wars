@@ -38,19 +38,15 @@ def create():
         receiver_id = game.player_1_id
 
 
-    #Comment back in after login possible
     # if current_user == user:
 
 
 
     image_file = request.files[f'image-for-{habit_id}']
 
-    print(image_file)
     output = upload_file_to_s3(image_file, Config.S3_BUCKET)
 
-    print(output)
-    #Add image path after AWS
-    #Change hardcoded game round id
+
 
                 
     latest_round = Round.select(pw.fn.MAX(Round.id)).where(Round.game_id == game_id).scalar()
@@ -64,6 +60,8 @@ def create():
                                 game_round_id = latest_round)
     
     new_habit_logged.save()
+
+    flash('Habit submitted. Waiting for your opponent\'s approval. Keep up the good work!')
 
     return redirect(url_for('games.show', game_id = game_id, username = username ))
 
@@ -119,8 +117,11 @@ def approve(username, game_id):
     loghabit = LogHabit.get_or_none(LogHabit.id == loghabit_id)
     LogHabit.update(approved = True).where(LogHabit.id == loghabit_id).execute()
 
+    flash('Habit approved.')
+
     if len(to_approve) < 1:
         return redirect(url_for('games.show', game_id = game_id, username = username))
+
 
     return redirect(url_for('log_habits.show_approve', game_id = game_id, username = username ))
 
@@ -144,6 +145,7 @@ def reject(username, game_id):
     delete_log = LogHabit.delete().where(LogHabit.id == loghabit_id)
     delete_log.execute()
 
+    flash('Habit rejected.')
 
     if len(to_approve) < 1:
         return redirect(url_for('games.show', game_id = game_id, username = username))
