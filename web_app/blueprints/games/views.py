@@ -38,20 +38,27 @@ def create():
     
     #error handle
     if p2_name == "":
-        flash("Please enter a player username!")
-        return redirect(url_for('games.new_game_page'))
+        flash("Please enter a player username!", "danger")
+        return redirect(url_for('games.new'))
+    elif p2_name == player_1.username:
+        flash("You can not invite yourself for a game. Please choose another user.", "danger")
+        return redirect(url_for('games.new'))
     else:
         player_2 = User.get_or_none(User.username == p2_name)
-        new_game = Game(player_1_id = player_1.id, player_2_id = player_2.id)
+        if player_2 == None:
+            flash("User doesn't exist. Please enter a valid username!", "danger")
+            return redirect(url_for('games.new'))
+        else:
+            new_game = Game(player_1_id = player_1.id, player_2_id = player_2.id)
 
     if (not habit_a_name )and (not habit_b_name) and (not habit_c_name):
-        flash('Enter at least one habit!')
-        return redirect(url_for('games.new_game_page'))
+        flash('Enter at least one habit!', "danger")
+        return redirect(url_for('games.new'))
 
     if habit_a_name:
         if not habit_a_frequency:
-            flash('Select how many times per week you wish to complete habit for habit 1')
-            return redirect(url_for('games.new_game_page'))
+            flash('Select how many times per week you wish to complete habit for habit 1', "danger")
+            return redirect(url_for('games.new'))
         else:
             habit_a = Habit(game = new_game, user = player_1, 
             name = habit_a_name, 
@@ -61,8 +68,8 @@ def create():
 
     if habit_b_name:
         if not habit_b_frequency:
-            flash('Select how many times per week you wish to complete habit for habit 2')
-            return redirect(url_for('games.new_game_page'))
+            flash('Select how many times per week you wish to complete habit for habit 2', "danger")
+            return redirect(url_for('games.'))
         else:
             habit_b = Habit(game = new_game, user = player_1, 
             name = habit_b_name, 
@@ -72,8 +79,8 @@ def create():
 
     if habit_c_name:
         if not habit_c_frequency:
-            flash('Select how many times per week you wish to complete habit for habit 3')
-            return redirect(url_for('games.new_game_page'))
+            flash('Select how many times per week you wish to complete habit for habit 3', "danger")
+            return redirect(url_for('games.new'))
         else:
             habit_c = Habit(game = new_game, user = player_1, 
             name = habit_c_name, 
@@ -84,7 +91,6 @@ def create():
     return redirect(url_for('games.new'))
 
 
-#Dont forget to change game round id!!!!
 @games_blueprint.route('/<username>/<game_id>', methods=["GET", "POST"])
 @login_required
 def show(username, game_id):

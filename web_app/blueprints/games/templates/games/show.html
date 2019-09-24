@@ -125,11 +125,11 @@ Your proDUCKtive war
                 <img class="w-100 rounded-circle mb-3" src="/static/img/game-duck-2.jpg">
                 <h3>Your habits</h3>
                 {% for i in range(0, length_habit_list)|reverse %}
-                <div class="habit my-1">
+                <div class="habit my-3">
                     {% if user_more_to_go[i] < 1 %}
                     <p> Congratulations! You don't have to {{user_habits[i].name.lower()}} again this week.</p>
                     {% else %}
-                    <p class="my-4">{{user_habits[i].name}}! {{user_more_to_go[i]}} more to go!</p>
+                    <p class="my-2">{{user_habits[i].name}}! {{user_more_to_go[i]}} more to go!</p>
                     {% endif %}
                     <div class="progress">
                         <div class="progress-bar" role="progressbar" aria-valuenow="{{rounded_progress[i]}}"
@@ -137,7 +137,7 @@ Your proDUCKtive war
                         </div>
                     </div>
                     {% if user_more_to_go[i] > 0 %}
-                    <form action={{ url_for('log_habits.create')}} method="POST" enctype="multipart/form-data">
+                    <form class="mt-1" action={{ url_for('log_habits.create')}} method="POST" enctype="multipart/form-data">
                         <input name='image-for-{{user_habits[i].id}}' type="file" accept="image/*" capture="camera"
                             value="Add photo">
                         <input name='habit-id' type='hidden' value={{user_habits[i].id}}>
@@ -177,7 +177,11 @@ Your proDUCKtive war
         {% endif %}
 
     </div>
-
+    <div class="d-flex justify-content-center mt-5" style="background-color: #4a6271;">
+        <div class="my-5 d-flex justify-content-center align-items-center w-75 rounded" id="foot">
+            <h5 style="color: white;">You only live once. Now is the time to give a quack.</h5>
+        </div>
+    </div>
 
     <style>
         #produck-title {

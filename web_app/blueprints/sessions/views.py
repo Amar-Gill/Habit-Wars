@@ -35,16 +35,13 @@ def create():
         result=check_password_hash(hashed_password, password_to_check)
         if result:
             print(result)
-            print('LEEROY')
-            print('JENKINS')
-            # flash('Success!')
             login_user(u)
             return redirect( url_for('users.show', username=username))
         else:
-            flash('Password incorrect')
+            flash('Password incorrect', 'danger')
             return render_template('sessions/new.html')
     else:
-        flash('Username incorrect')
+        flash('Username incorrect', 'danger')
         return render_template('sessions/new.html')
 
 @sessions_blueprint.route('/', methods=["GET"])
