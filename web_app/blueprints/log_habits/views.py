@@ -79,7 +79,7 @@ def show_approve(username, game_id):
     for habit in habits:
         game_habits.append(habit.id)
 
-    to_approve = LogHabit.select().where((LogHabit.approved == False) & (LogHabit.receiver_id == user.id) & (LogHabit.habit_id in game_habits))
+    to_approve = LogHabit.select().where((LogHabit.approved == False) & (LogHabit.receiver_id == user.id) & (LogHabit.habit_id << game_habits))
 
     to_approve_length = len(to_approve)
     sender_ids = []
