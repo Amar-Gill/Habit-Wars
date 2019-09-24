@@ -156,6 +156,7 @@
             <div class="col mt-3">
                 <div class="progress">
                     <div class="progress-bar bg-success p1-progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar bg-danger p1-progress-bar-dmg" role="progressbar" style="width: 0%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
             </div>
             <div class="col mt-3">
@@ -167,6 +168,7 @@
             <div class="col mt-3">
                 <div class="progress">
                     <div class="progress-bar bg-success p2-progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar bg-danger p2-progress-bar-dmg" role="progressbar" style="width: 0%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
 
             </div>
@@ -266,13 +268,18 @@
                 setTimeout( function () {
                 $(".p2-progress-bar").width(`${new_width}%`)
                 }, 1000)
+                setTimeout( function () {
+                    $(".p2-progress-bar-dmg").width(`${100 - new_width}%`)
+                }, 1000)
             } else {
                 p1Health -= damage
                 console.log('P1 health: ' + p1Health)
                 let new_width = (p1Health/{{round.player_1_stats[1]}})*100
                 setTimeout(function() {
                 $(".p1-progress-bar").width(`${new_width}%`)
-
+                }, 1000)
+                setTimeout( function () {
+                    $(".p1-progress-bar-dmg").width(`${100 - new_width}%`)
                 }, 1000)
             }
             script.shift()
