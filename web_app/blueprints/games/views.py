@@ -40,6 +40,9 @@ def create():
     if p2_name == "":
         flash("Please enter a player username!")
         return redirect(url_for('games.new'))
+    elif p2_name == player_1.username:
+        flash("You can not invite yourself for a game. Please choose another user.")
+        return redirect(url_for('games.new'))
     else:
         player_2 = User.get_or_none(User.username == p2_name)
         if player_2 == None:
