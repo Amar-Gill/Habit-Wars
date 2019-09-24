@@ -99,7 +99,7 @@ def show(username, game_id):
 
     #int value for latest round_id for the game
     latest_round = Round.select(pw.fn.MAX(Round.id)).where(Round.game_id == game_id).scalar()
-    current_round_object = Round.select().where(Round.id == latest_round).get()
+    current_round_object = Round.get_or_none(Round.id == latest_round)
 
     # Active player - could be either player 1 or 2
     user = User.get_or_none(User.username == username)    
