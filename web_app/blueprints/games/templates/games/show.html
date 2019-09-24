@@ -109,7 +109,9 @@ Your proDUCKtive war
         <!-- Page state when game is accepted -->
         <div class="d-flex flex-column justify-content-between" id="header-div">
             <h1 id="produck-title">Your proDUCKtivity war</h1>
+            {% if current_round_object %}
             <h3 style="color: white;">Week of: {{current_round_object.created_at.date()}}</h3>
+            {% endif %}
 
 
             <!-- Player 1 Habits -->
