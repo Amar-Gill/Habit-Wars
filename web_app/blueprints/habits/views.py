@@ -78,7 +78,7 @@ def create(username, game_id):
         # start asynchronus loop for rounds - first call beginning immediately
         async_create_round.delay(game_id)
 
-        return redirect(f'/game/{username}/{game_id}')
+        return redirect( url_for('games.show', game_id=game_id, username=username))
 
     else:
         # destroy game

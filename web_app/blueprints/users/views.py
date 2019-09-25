@@ -12,6 +12,7 @@ users_blueprint = Blueprint('users',
                             template_folder='templates')
 
 @users_blueprint.route("/show/<username>")
+@login_required
 def show(username):
     return render_template('users/show.html')
 

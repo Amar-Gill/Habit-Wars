@@ -19,6 +19,7 @@ games_blueprint = Blueprint('games',
 
 
 @games_blueprint.route("/new")
+@login_required
 def new():
     return render_template('games/new.html')
 
@@ -88,7 +89,7 @@ def create():
             new_game.save()
             habit_c.save()
 
-    return redirect(url_for('games.new'))
+    return redirect(url_for('games.show', game_id=new_game.id, username=player_1.username))
 
 
 @games_blueprint.route('/<username>/<game_id>', methods=["GET", "POST"])
@@ -100,6 +101,9 @@ def show(username, game_id):
     #int value for latest round_id for the game
     latest_round = Round.select(pw.fn.MAX(Round.id)).where(Round.game_id == game_id).scalar()
     current_round_object = Round.get_or_none(Round.id == latest_round)
+
+    # get length of all rounds for game to send round number into anchor link to show latest round
+    len_round =len(Round.select().where(Round.game_id == game_id))
 
     # Active player - could be either player 1 or 2
     user = User.get_or_none(User.username == username)    
@@ -178,10 +182,12 @@ def show(username, game_id):
                             game_accepted = game_accepted,
                             active_user=active_user,
                             to_approve_length = to_approve_length,
-                            current_round_object=current_round_object)
+                            current_round_object=current_round_object,
+                            len_round=len_round)
 
 
 @games_blueprint.route('/<username>/index')
+@login_required
 def index(username):
     user = User.get_or_none(User.username == username)
 

@@ -18,6 +18,7 @@ rounds_blueprint = Blueprint('rounds',
 
 
 @rounds_blueprint.route('/show/<game_id>/<round_id>', methods=['GET'])
+@login_required
 def show(game_id, round_id):
 
 
@@ -271,8 +272,9 @@ def battle(game_id, player, round_id):
     return redirect( url_for('rounds.show', game_id=game_id, round_id=round_id, round_num=round_num))
 
 
-@rounds_blueprint.route('/index/<game_id>', methods=["GET"])
-def index(game_id):
+@rounds_blueprint.route('/index/<game_id>/<user_id>', methods=["GET"])
+@login_required
+def index(game_id, user_id):
     rounds = Round.select().where(Round.game_id == game_id)
     game = Game.get_by_id(game_id)
     return render_template('/rounds/index.html', rounds=rounds, game=game)

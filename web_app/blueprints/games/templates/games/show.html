@@ -6,9 +6,9 @@ Your proDUCKtive war
 {% endblock %}
 
 {% block content %}
-<main>
+<main class="d-flex flex-column justify-content-between">
 
-    <div class="container justify-content-center">
+    <div class="container justify-content-center"></div>
 
         <!-- check if game accepted -->
         {% if not game_accepted %}
@@ -98,7 +98,7 @@ Your proDUCKtive war
         {% else %}
         <h1 id='waiting-header'>Waiting for {{opponent_username}} to accept your challenge!</h1>
         <img id="shuriken" src="/static/img/ninja-shuriken.png" />
-        <div id="attribution-tag">Icons made by <a href="https://www.flaticon.com/authors/freepik"
+        <div class="ml-3" id="attribution-tag">Icons made by <a href="https://www.flaticon.com/authors/freepik"
                 title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/"
                 title="Flaticon">www.flaticon.com</a>
         </div>
@@ -108,9 +108,9 @@ Your proDUCKtive war
 
         <!-- Page state when game is accepted -->
         <div class="d-flex flex-column justify-content-between" id="header-div">
-            <h1 id="produck-title">Your proDUCKtivity war</h1>
+            <h1 id="produck-title">Pro-Duck-tivity tracking</h1>
             {% if current_round_object %}
-            <h3 style="color: white;">Week of: {{current_round_object.created_at.date()}}</h3>
+            <a href="{{ url_for('rounds.show', game_id=game_id, round_id=current_round_object.id, round_num=len_round) }}"><h3 style="color: white;">Week of: {{current_round_object.created_at.date()}}</h3></a>
             {% endif %}
 
 
@@ -210,10 +210,11 @@ Your proDUCKtive war
 
         #waiting-header {
             margin-bottom: 16vh;
+            color: white;
         }
 
         #shuriken {
-            width: 64vw;
+            width: 28vw;
             margin: auto;
             display: block;
             animation-name: spinning;
@@ -222,9 +223,23 @@ Your proDUCKtive war
             animation-timing-function: linear;
         }
 
+        @media only screen and (max-width: 600px) {
+            #shuriken {
+                width: 64vw;
+                margin: auto;
+                display: block;
+                animation-name: spinning;
+                animation-duration: 8s;
+                animation-iteration-count: infinite;
+                animation-timing-function: linear;
+            }
+        }
+
         #attribution-tag {
             bottom: 2vh;
             position: absolute;
+            color: white;
+            margin: auto;
         }
 
         /* #accept-form {
