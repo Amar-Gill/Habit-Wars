@@ -13,82 +13,82 @@
             <form id='accept-form' action={{ url_for("games.create", username=username, game_id=game_id)}}
                 method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-                
+
                 <div class="form-row">
-                        <h4 style="color: white;"> Enter your opponent's user name:</h4>
-                            <input class="form-control" type='text' name="p2_name" placeholder="Opponent's username">
-                        </div>
-                        <hr>
+                    <h4 style="color: white;"> Enter your opponent's user name:</h4>
+                    <input class="form-control" type='text' name="p2_name" placeholder="Opponent's username">
+                </div>
+                <hr>
 
-                        <!-- <label class='ml-auto'> Select Frequency</label> -->
-                        <div class="form-row">
-                            <div class="form-group col-7">
-                                <label for="habit_1_name">Habit 1</label>
-                                <input form="accept-form" id="habit_1_name" name='habit_1_name' class="form-control" type='text'>
-                            </div>
-                            <div class="form-group col-5">
-                                <label for="habit_1_value">Weekly Goal</label>
-                                <select form='accept-form' id="habit_1_value" name="habit_1_value"
-                                    class="custom-select">
-                                    <option value='0' selected disabled>Choose...</option>
-                                    <option value='1'>1</option>
-                                    <option value='2'>2</option>
-                                    <option value='3'>3</option>
-                                    <option value='4'>4</option>
-                                    <option value='5'>5</option>
-                                    <option value='6'>6</option>
-                                    <option value='7'>7</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group col-7">
-                                <label for="habit_2_name">Habit 2</label>
-                                <input form="accept-form" id="habit_2_name" name='habit_2_name' class="form-control" type='text'>
-                            </div>
-                            <div class="form-group col-5">
-                                <label for="habit_2_value">Weekly Goal</label>
-                                <select form='accept-form' id="habit_2_value" name="habit_2_value"
-                                    class="custom-select">
-                                    <option value='0' selected disabled>Choose...</option>
-                                    <option value='1'>1</option>
-                                    <option value='2'>2</option>
-                                    <option value='3'>3</option>
-                                    <option value='4'>4</option>
-                                    <option value='5'>5</option>
-                                    <option value='6'>6</option>
-                                    <option value='7'>7</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group col-7">
-                                <label for="habit_3_name">Habit 3</label>
-                                <input form="accept-form" id="habit_3_name" name='habit_3_name' class="form-control" type='text'>
-                            </div>
-                            <div class="form-group col-5">
-                                <label for="habit_3_value">Weekly Goal</label>
-                                <select form='accept-form' id="habit_3_value" name="habit_3_value"
-                                    class="custom-select">
-                                    <option value='0' selected disabled>Choose...</option>
-                                    <option value='1'>1</option>
-                                    <option value='2'>2</option>
-                                    <option value='3'>3</option>
-                                    <option value='4'>4</option>
-                                    <option value='5'>5</option>
-                                    <option value='6'>6</option>
-                                    <option value='7'>7</option>
-                                </select>
-                            </div>
-                        </div>
-                    
-                    <div class="d-flex flex-row-reverse">
-                        <input form='accept-form' name='challenge-response' value='Accept' type='submit'
-                            class='btn btn-info'>
+                <!-- <label class='ml-auto'> Select Frequency</label> -->
+                <div class="form-row">
+                    <div class="form-group col-7">
+                        <label for="habit_1_name">Habit 1</label>
+                        <input form="accept-form" id="habit_1_name" name='habit_1_name' class="form-control"
+                            type='text'>
                     </div>
-                
+                    <div class="form-group col-5">
+                        <label for="habit_1_value">Weekly Goal</label>
+                        <select form='accept-form' id="habit_1_value" name="habit_1_value" class="custom-select">
+                            <option value='0' selected disabled>Choose...</option>
+                            <option value='1'>1</option>
+                            <option value='2'>2</option>
+                            <option value='3'>3</option>
+                            <option value='4'>4</option>
+                            <option value='5'>5</option>
+                            <option value='6'>6</option>
+                            <option value='7'>7</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-7">
+                        <label for="habit_2_name">Habit 2</label>
+                        <input form="accept-form" id="habit_2_name" name='habit_2_name' class="form-control"
+                            type='text'>
+                    </div>
+                    <div class="form-group col-5">
+                        <label for="habit_2_value">Weekly Goal</label>
+                        <select form='accept-form' id="habit_2_value" name="habit_2_value" class="custom-select">
+                            <option value='0' selected disabled>Choose...</option>
+                            <option value='1'>1</option>
+                            <option value='2'>2</option>
+                            <option value='3'>3</option>
+                            <option value='4'>4</option>
+                            <option value='5'>5</option>
+                            <option value='6'>6</option>
+                            <option value='7'>7</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-7">
+                        <label for="habit_3_name">Habit 3</label>
+                        <input form="accept-form" id="habit_3_name" name='habit_3_name' class="form-control"
+                            type='text'>
+                    </div>
+                    <div class="form-group col-5">
+                        <label for="habit_3_value">Weekly Goal</label>
+                        <select form='accept-form' id="habit_3_value" name="habit_3_value" class="custom-select">
+                            <option value='0' selected disabled>Choose...</option>
+                            <option value='1'>1</option>
+                            <option value='2'>2</option>
+                            <option value='3'>3</option>
+                            <option value='4'>4</option>
+                            <option value='5'>5</option>
+                            <option value='6'>6</option>
+                            <option value='7'>7</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-row-reverse">
+                    <input form='accept-form' name='challenge-response' value='Challenge' type='submit'
+                        class='btn btn-info'>
+                </div>
+
             </form>
 
         </div>
