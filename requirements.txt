@@ -37,5 +37,5 @@ webassets==0.12.1
 Werkzeug==0.14.1
 WTForms==2.2.1
 zipp==0.6.0
-certifi==2018.11.29
+certifi==2022.12.7
 peewee-db-evolve==3.7.0
